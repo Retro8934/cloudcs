@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudCS - Облачный гейминг</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(255, 70, 70, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(255, 100, 50, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(255, 50, 50, 0.05) 0%, transparent 50%);
+            background-color: #0a0a0f;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(3%, 2%) rotate(2deg); }
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255, 70, 70, 0.03) 0%, transparent 30%),
+                radial-gradient(circle at 70% 60%, rgba(255, 100, 50, 0.03) 0%, transparent 30%);
+            animation: floatBg 20s ease-in-out infinite;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 50px;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 10px 50px;
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff6b6b, #ffa94d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo i {
+            -webkit-text-fill-color: initial;
+            color: #ff6b6b;
+            font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b6b, #ffa94d);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .btn-nav {
+            padding: 8px 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            border-radius: 8px;
+            color: #fff !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .nav-links .btn-nav::after {
+            display: none;
+        }
+
+        .nav-links .btn-nav:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 15px 5px 5px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-menu:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .user-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .user-badge {
+            font-size: 10px;
+            padding: 2px 10px;
+            border-radius: 50px;
+            background: rgba(81, 207, 102, 0.2);
+            color: #51cf66;
+            font-weight: 600;
+        }
+
+        .user-badge.free {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+        }
+
+        .hero {
+            padding: 140px 50px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            color: #ff6b6b;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+        }
+
+        .hero-stat .number {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b6b, #ffa94d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-stat .label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 5px;
+        }
+
+        .pricing {
+            padding: 60px 50px 100px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            align-items: stretch;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 40px 35px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 107, 107, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-card.popular {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.05);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.04) translateY(-10px);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: #ff6b6b;
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .card-price {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .card-price .currency {
+            font-size: 24px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .card-price .period {
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .card-price.free {
+            color: #51cf66;
+        }
+
+        .card-features {
+            list-style: none;
+            margin: 30px 0;
+            flex-grow: 1;
+        }
+
+        .card-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+        }
+
+        .card-features li i {
+            color: #51cf66;
+            font-size: 16px;
+            width: 20px;
+        }
+
+        .card-features li i.fa-times {
+            color: #ff6b6b;
+        }
+
+        .card-features li .highlight-feature {
+            color: #ffa94d;
+            font-weight: 600;
+        }
+
+        .card-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-btn.primary {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            color: #fff;
+        }
+
+        .card-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
+        }
+
+        .card-btn.secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-btn.free-btn {
+            background: linear-gradient(90deg, #51cf66, #2b8a3e);
+            color: #fff;
+        }
+
+        .card-btn.free-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(81, 207, 102, 0.3);
+        }
+
+        .card-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .card-btn.active-subscription {
+            background: rgba(81, 207, 102, 0.15);
+            color: #51cf66;
+            border: 1px solid rgba(81, 207, 102, 0.3);
+            cursor: default;
+        }
+
+        .card-btn.active-subscription:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .free-timer {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(81, 207, 102, 0.08);
+            border: 1px solid rgba(81, 207, 102, 0.15);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .free-timer .time-left {
+            color: #51cf66;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .free-timer .time-left.urgent {
+            color: #ff6b6b;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .launcher-section {
+            padding: 80px 50px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .launcher-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .connection-type {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .connection-type button {
+            padding: 10px 25px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .connection-type button.active {
+            background: rgba(255, 107, 107, 0.15);
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .connection-type button:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .connection-type button.active:hover {
+            background: rgba(255, 107, 107, 0.2);
+        }
+
+        .connection-type button i {
+            margin-right: 8px;
+        }
+
+        .connection-type button.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connection-type button.disabled::before {
+            content: '🚧 В РАЗРАБОТКЕ';
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 50px;
+            letter-spacing: 0.5px;
+            transform: rotate(5deg);
+            box-shadow: 0 2px 10px rgba(238, 90, 36, 0.3);
+        }
+
+        .connection-type button.disabled .dev-badge {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 10px;
+            background: rgba(255, 107, 107, 0.2);
+            padding: 2px 10px;
+            border-radius: 50px;
+            color: #ff6b6b;
+            font-weight: 700;
+            animation: pulseBadge 1.5s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.1);
+        }
+
+        .input-group .ngrok-input {
+            display: none;
+        }
+
+        .input-group .ngrok-input.visible {
+            display: block;
+        }
+
+        .input-group .internet-input {
+            display: none;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-group .internet-input.visible {
+            display: block;
+        }
+
+        .launch-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .launch-controls button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-launch {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            color: #fff;
+        }
+
+        .btn-launch:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
+        }
+
+        .btn-launch:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-stop {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-stop:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.online {
+            background: #51cf66;
+            box-shadow: 0 0 20px rgba(81, 207, 102, 0.3);
+        }
+
+        .log-area {
+            margin-top: 15px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #51cf66;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: left;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .log-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .log-area::-webkit-scrollbar-thumb {
+            background: #ff6b6b;
+            border-radius: 2px;
+        }
+
+        .connection-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 107, 107, 0.05);
+            border: 1px solid rgba(255, 107, 107, 0.1);
+            border-radius: 10px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .connection-info strong {
+            color: #ffa94d;
+        }
+
+        .footer {
+            padding: 40px 50px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* МОДАЛЬНЫЕ ОКНА */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            animation: modalIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .modal p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal .modal-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        .modal .modal-btn.primary {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            color: #fff;
+        }
+
+        .modal .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
+        }
+
+        .modal .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .modal .modal-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal .modal-btn.danger {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .modal .modal-btn.danger:hover {
+            background: rgba(255, 107, 107, 0.25);
+        }
+
+        .modal .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .modal .form-group label {
+            display: block;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 5px;
+        }
+
+        .modal .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .modal .form-group input:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .modal .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal .auth-switch {
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 15px;
+        }
+
+        .modal .auth-switch span {
+            color: #ff6b6b;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .modal .auth-switch span:hover {
+            text-decoration: underline;
+        }
+
+        .modal .subscription-info {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .modal .subscription-info .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 14px;
+        }
+
+        .modal .subscription-info .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .modal .subscription-info .info-label {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal .subscription-info .info-value {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .modal .subscription-info .info-value.active {
+            color: #51cf66;
+        }
+
+        .modal .subscription-info .info-value.inactive {
+            color: #ff6b6b;
+        }
+
+        .modal .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .modal .error-message.visible {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-stats {
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+
+            .pricing {
+                padding: 40px 20px 60px;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.popular {
+                transform: scale(1);
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-10px);
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .launcher-section {
+                padding: 40px 20px;
+            }
+
+            .launcher-box .launch-controls {
+                flex-direction: column;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .connection-type {
+                flex-wrap: wrap;
+            }
+
+            .connection-type button {
+                flex: 1;
+                min-width: 100px;
+                font-size: 12px;
+                padding: 8px 15px;
+            }
+
+            .user-menu .user-name {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .card-price {
+                font-size: 36px;
+            }
+
+            .launcher-box {
+                padding: 20px;
+            }
+
+            .modal {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- НАВБАР -->
+    <nav class="navbar" id="navbar">
+        <div class="logo" onclick="location.reload()">
+            <i class="fas fa-cloud"></i>
+            CloudCS
+        </div>
+        <div class="nav-links">
+            <a href="#pricing">Тарифы</a>
+            <a href="#launcher">Играть</a>
+            
+            <!-- Меню пользователя -->
+            <div class="user-menu" id="userMenu" onclick="openProfileModal()" style="display: none;">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userName">Пользователь</span>
+                <span class="user-badge" id="userBadge">Бесплатно</span>
+            </div>
+            
+            <!-- Кнопка входа -->
+            <button class="btn-nav" id="loginBtn" onclick="openAuthModal('login')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <i class="fas fa-user"></i> Войти
+            </button>
+        </div>
+    </nav>
+
+    <!-- ГЕРОЙ -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-bolt"></i> Облачный гейминг 2026
+        </div>
+        <h1>
+            Играй в <span class="highlight">Counter-Strike</span><br>
+            из любой точки мира
+        </h1>
+        <p>
+            Мощные облачные серверы, минимальная задержка и полная свобода.
+            Подключайся к любимой игре где угодно и когда угодно.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="number">1ч</div>
+                <div class="label">Бесплатно каждый день</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">24/7</div>
+                <div class="label">Доступность серверов</div>
+            </div>
+            <div class="hero-stat">
+                <div class="number">🌐</div>
+                <div class="label">Удалённый доступ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ТАРИФЫ -->
+    <section class="pricing" id="pricing">
+        <div class="section-header">
+            <h2>Выбери свой <span style="background: linear-gradient(135deg, #ff6b6b, #ffa94d); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">тариф</span></h2>
+            <p>Начни с бесплатного часа или выбери премиум-доступ без ограничений</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Бесплатный -->
+            <div class="pricing-card">
+                <div class="card-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="card-title">Бесплатный</div>
+                <div class="card-subtitle">Идеально для теста</div>
+                <div class="card-price free">
+                    0₽ <span class="period">/ день</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> 1 час игрового времени</li>
+                    <li><i class="fas fa-check"></i> Доступ к CS:GO / CS2</li>
+                    <li><i class="fas fa-check"></i> Базовая производительность</li>
+                    <li><i class="fas fa-check"></i> Поддержка 24/7</li>
+                    <li><i class="fas fa-times"></i> Приоритетная очередь</li>
+                    <li><i class="fas fa-times"></i> Высокое качество графики</li>
+                </ul>
+                <button class="card-btn free-btn" id="freeActivateBtn" onclick="activateFreeTrial()">
+                    <i class="fas fa-play"></i> Активировать бесплатно
+                </button>
+                <div class="free-timer">
+                    <div>⏱ Осталось бесплатного времени:</div>
+                    <div class="time-left" id="timeLeft">1:00:00</div>
+                </div>
+            </div>
+
+            <!-- Стандарт -->
+            <div class="pricing-card popular">
+                <div class="card-badge">🔥 Популярный</div>
+                <div class="card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="card-title">Стандарт</div>
+                <div class="card-subtitle">Для настоящих фанатов</div>
+                <div class="card-price">
+                    490₽ <span class="period">/ месяц</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Неограниченное</span> время</li>
+                    <li><i class="fas fa-check"></i> Доступ к CS:GO / CS2</li>
+                    <li><i class="fas fa-check"></i> Высокая производительность</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Приоритетная</span> очередь</li>
+                    <li><i class="fas fa-check"></i> Максимальное качество графики</li>
+                    <li><i class="fas fa-check"></i> Поддержка 24/7</li>
+                </ul>
+                <button class="card-btn primary" id="standardBtn" onclick="subscribe('standard')">
+                    <i class="fas fa-rocket"></i> Подключить
+                </button>
+            </div>
+
+            <!-- Премиум -->
+            <div class="pricing-card">
+                <div class="card-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="card-title">Премиум</div>
+                <div class="card-subtitle">Для профессионалов</div>
+                <div class="card-price">
+                    990₽ <span class="period">/ месяц</span>
+                </div>
+                <ul class="card-features">
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Неограниченное</span> время</li>
+                    <li><i class="fas fa-check"></i> Доступ ко всем играм</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Ультра</span> производительность</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">VIP</span> очередь</li>
+                    <li><i class="fas fa-check"></i> Максимальное качество графики</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Персональный</span> менеджер</li>
+                </ul>
+                <button class="card-btn primary" id="premiumBtn" onclick="subscribe('premium')">
+                    <i class="fas fa-crown"></i> Подключить
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ЛАУНЧЕР -->
+    <section class="launcher-section" id="launcher">
+        <div class="section-header">
+            <h2>🚀 Запустить игру</h2>
+            <p>Выбери способ подключения и начни играть</p>
+        </div>
+
+        <div class="launcher-box">
+            <div class="connection-type">
+                <button class="active" id="localBtn" onclick="switchConnection('local')">
+                    <i class="fas fa-network-wired"></i> Локально
+                </button>
+                <button id="ngrokBtn" onclick="switchConnection('ngrok')">
+                    <i class="fas fa-globe"></i> ngrok
+                </button>
+                <button class="disabled" id="internetBtn" onclick="showDevModal()">
+                    <i class="fas fa-cloud"></i> Интернет
+                    <span class="dev-badge">🚧 Dev</span>
+                </button>
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="server-input" id="serverInput" placeholder="IP сервера (например, 127.0.0.1:27015)" value="127.0.0.1:27015">
+                <input type="text" class="ngrok-input" id="ngrokInput" placeholder="ngrok URL (например, https://abc123.ngrok.io)" value="">
+                <input type="text" class="internet-input" id="internetInput" placeholder="🌐 Интернет-подключение (в разработке)" value="Подключение через интернет" disabled>
+            </div>
+
+            <div class="launch-controls">
+                <button class="btn-launch" id="launchBtn" onclick="launchGame()">
+                    <i class="fas fa-play"></i> Запустить CS
+                </button>
+                <button class="btn-stop" id="stopBtn" onclick="stopGame()">
+                    <i class="fas fa-stop"></i> Остановить
+                </button>
+            </div>
+
+            <div class="status-indicator">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Сервер отключён</span>
+            </div>
+
+            <div class="connection-info" id="connectionInfo">
+                <i class="fas fa-info-circle"></i>
+                Текущее подключение: <strong id="connectionTypeDisplay">Локальное</strong>
+                <span id="connectionUrlDisplay"></span>
+            </div>
+
+            <div class="log-area" id="logArea">[Система] CloudCS Лаунчер загружен</div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>
+            © 2026 CloudCS — Облачный гейминг для настоящих киберспортсменов.<br>
+            <a href="#">Политика конфиденциальности</a> • <a href="#">Пользовательское соглашение</a>
+        </p>
+    </footer>
+
+    <!-- МОДАЛЬНОЕ ОКНО: АВТОРИЗАЦИЯ -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <h3 id="authTitle">Вход в аккаунт</h3>
+            <p id="authSubtitle">Войдите, чтобы управлять подпиской</p>
+            
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="authEmail" placeholder="example@mail.com">
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="authPassword" placeholder="Минимум 6 символов">
+            </div>
+            
+            <div class="error-message" id="authError">Неверный email или пароль</div>
+            
+            <button class="modal-btn primary" id="authActionBtn" onclick="handleAuth()">
+                <i class="fas fa-sign-in-alt"></i> Войти
+            </button>
+            
+            <div class="auth-switch">
+                <span id="authSwitchText">Нет аккаунта? <span onclick="switchAuthMode()">Зарегистрироваться</span></span>
+            </div>
+            
+            <button class="modal-btn secondary" onclick="closeAuthModal()">Отмена</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ПРОФИЛЬ -->
+    <div class="modal-overlay" id="profileModal">
+        <div class="modal">
+            <h3>👤 Мой профиль</h3>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa94d); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 32px; font-weight: 700; color: #fff;" id="profileAvatar">U</div>
+                <div style="font-size: 20px; font-weight: 700; margin-top: 10px;" id="profileName">Пользователь</div>
+                <div style="color: rgba(255,255,255,0.4); font-size: 14px;" id="profileEmail">user@mail.com</div>
+            </div>
+            
+            <div class="subscription-info">
+                <div class="info-row">
+                    <span class="info-label">📋 Статус подписки</span>
+                    <span class="info-value" id="profileStatus">Бесплатный</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">📅 Действует до</span>
+                    <span class="info-value" id="profileExpiry">—</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">⏱ Бесплатное время</span>
+                    <span class="info-value" id="profileFreeTime">1:00:00</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🎮 Игр запущено</span>
+                    <span class="info-value" id="profileGames">0</span>
+                </div>
+            </div>
+            
+            <button class="modal-btn danger" id="cancelSubscriptionBtn" onclick="cancelSubscription()" style="display: none;">
+                <i class="fas fa-times-circle"></i> Отключить подписку
+            </button>
+            
+            <button class="modal-btn secondary" onclick="logoutUser()" style="background: rgba(255,107,107,0.1); color: #ff6b6b; border-color: rgba(255,107,107,0.2);">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </button>
+            
+            <button class="modal-btn secondary" onclick="closeProfileModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: В РАЗРАБОТКЕ -->
+    <div class="modal-overlay" id="devModalOverlay">
+        <div class="modal">
+            <h3>🚧 В разработке</h3>
+            <p>
+                <i class="fas fa-tools" style="color: #ffa94d; font-size: 48px; display: block; margin: 0 auto 20px;"></i>
+                Функция подключения через интернет находится в активной разработке.
+                <br><br>
+                Скоро вы сможете подключаться к игре без необходимости в локальной сети или ngrok!
+                <br><br>
+                <span style="color: #ffa94d; font-weight: 600;">✨ Ожидайте обновления!</span>
+            </p>
+            <button class="modal-btn primary" onclick="closeDevModal()">
+                <i class="fas fa-check"></i> Понятно
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  ХРАНИЛИЩЕ ДАННЫХ (localStorage)
+        // ============================================================
+        const DB = {
+            getUsers() {
+                return JSON.parse(localStorage.getItem('cloudcs_users') || '[]');
+            },
+            saveUsers(users) {
+                localStorage.setItem('cloudcs_users', JSON.stringify(users));
+            },
+            getCurrentUser() {
+                return JSON.parse(localStorage.getItem('cloudcs_current_user') || 'null');
+            },
+            saveCurrentUser(user) {
+                localStorage.setItem('cloudcs_current_user', JSON.stringify(user));
+            },
+            clearCurrentUser() {
+                localStorage.removeItem('cloudcs_current_user');
+            },
+            getUserByEmail(email) {
+                return this.getUsers().find(u => u.email === email);
+            },
+            updateUser(email, updates) {
+                const users = this.getUsers();
+                const index = users.findIndex(u => u.email === email);
+                if (index !== -1) {
+                    users[index] = { ...users[index], ...updates };
+                    this.saveUsers(users);
+                    const current = this.getCurrentUser();
+                    if (current && current.email === email) {
+                        this.saveCurrentUser(users[index]);
+                    }
+                    return users[index];
+                }
+                return null;
+            }
+        };
+
+        // ============================================================
+        //  ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+        // ============================================================
+        let API_URL = 'http://127.0.0.1:5000';
+        let connectionType = 'local';
+        let freeTimeRemaining = 3600;
+        let freeTimerInterval = null;
+        let isFreeActive = false;
+        let pollingInterval = null;
+        let isAuthMode = 'login';
+        let currentUser = null;
+
+        // ============================================================
+        //  DOM ЭЛЕМЕНТЫ
+        // ============================================================
+        const logArea = document.getElementById('logArea');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const launchBtn = document.getElementById('launchBtn');
+        const serverInput = document.getElementById('serverInput');
+        const ngrokInput = document.getElementById('ngrokInput');
+        const localBtn = document.getElementById('localBtn');
+        const ngrokBtn = document.getElementById('ngrokBtn');
+        const internetBtn = document.getElementById('internetBtn');
+        const connectionTypeDisplay = document.getElementById('connectionTypeDisplay');
+        const connectionUrlDisplay = document.getElementById('connectionUrlDisplay');
+        const timeLeftEl = document.getElementById('timeLeft');
+
+        const authModal = document.getElementById('authModal');
+        const authTitle = document.getElementById('authTitle');
+        const authSubtitle = document.getElementById('authSubtitle');
+        const authEmail = document.getElementById('authEmail');
+        const authPassword = document.getElementById('authPassword');
+        const authActionBtn = document.getElementById('authActionBtn');
+        const authError = document.getElementById('authError');
+        const authSwitchText = document.getElementById('authSwitchText');
+        const loginBtn = document.getElementById('loginBtn');
+        const userMenu = document.getElementById('userMenu');
+        const userName = document.getElementById('userName');
+        const userAvatar = document.getElementById('userAvatar');
+        const userBadge = document.getElementById('userBadge');
+
+        const profileModal = document.getElementById('profileModal');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName = document.getElementById('profileName');
+        const profileEmail = document.getElementById('profileEmail');
+        const profileStatus = document.getElementById('profileStatus');
+        const profileExpiry = document.getElementById('profileExpiry');
+        const profileFreeTime = document.getElementById('profileFreeTime');
+        const profileGames = document.getElementById('profileGames');
+        const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
+
+        const freeActivateBtn = document.getElementById('freeActivateBtn');
+        const standardBtn = document.getElementById('standardBtn');
+        const premiumBtn = document.getElementById('premiumBtn');
+
+        const devModalOverlay = document.getElementById('devModalOverlay');
+
+        // ============================================================
+        //  АВТОРИЗАЦИЯ
+        // ============================================================
+        function openAuthModal(mode = 'login') {
+            isAuthMode = mode;
+            authModal.classList.add('active');
+            authError.classList.remove('visible');
+            authEmail.value = '';
+            authPassword.value = '';
+            
+            if (mode === 'login') {
+                authTitle.textContent = '🔐 Вход в аккаунт';
+                authSubtitle.textContent = 'Войдите, чтобы управлять подпиской';
+                authActionBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Войти';
+                authSwitchText.innerHTML = 'Нет аккаунта? <span onclick="switchAuthMode()">Зарегистрироваться</span>';
+            } else {
+                authTitle.textContent = '📝 Регистрация';
+                authSubtitle.textContent = 'Создайте аккаунт для доступа к тарифам';
+                authActionBtn.innerHTML = '<i class="fas fa-user-plus"></i> Зарегистрироваться';
+                authSwitchText.innerHTML = 'Уже есть аккаунт? <span onclick="switchAuthMode()">Войти</span>';
+            }
+        }
+
+        function closeAuthModal() {
+            authModal.classList.remove('active');
+        }
+
+        function switchAuthMode() {
+            const newMode = isAuthMode === 'login' ? 'register' : 'login';
+            openAuthModal(newMode);
+        }
+
+        function handleAuth() {
+            const email = authEmail.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!email || !password) {
+                authError.textContent = 'Заполните все поля!';
+                authError.classList.add('visible');
+                return;
+            }
+
+            if (password.length < 6) {
+                authError.textContent = 'Пароль должен быть минимум 6 символов!';
+                authError.classList.add('visible');
+                return;
+            }
+
+            if (isAuthMode === 'register') {
+                const users = DB.getUsers();
+                if (users.find(u => u.email === email)) {
+                    authError.textContent = 'Этот email уже зарегистрирован!';
+                    authError.classList.add('visible');
+                    return;
+                }
+
+                const newUser = {
+                    email: email,
+                    password: password,
+                    subscription: 'free',
+                    subscription_expiry: null,
+                    games_played: 0,
+                    created_at: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                DB.saveUsers(users);
+                DB.saveCurrentUser(newUser);
+                currentUser = newUser;
+                updateUI();
+                closeAuthModal();
+                addLog(`✅ Добро пожаловать, ${email}!`);
+                showNotification('Регистрация успешна!', 'success');
+            } else {
+                const user = DB.getUserByEmail(email);
+                if (!user || user.password !== password) {
+                    authError.textContent = 'Неверный email или пароль!';
+                    authError.classList.add('visible');
+                    return;
+                }
+
+                DB.saveCurrentUser(user);
+                currentUser = user;
+                updateUI();
+                closeAuthModal();
+                addLog(`✅ Добро пожаловать, ${email}!`);
+                showNotification('Вход выполнен!', 'success');
+            }
+        }
+
+        function logoutUser() {
+            DB.clearCurrentUser();
+            currentUser = null;
+            updateUI();
+            closeProfileModal();
+            addLog('👋 Вы вышли из аккаунта');
+            showNotification('Вы вышли из аккаунта', 'info');
+        }
+
+        function openProfileModal() {
+            if (!currentUser) return;
+            
+            profileAvatar.textContent = currentUser.email.charAt(0).toUpperCase();
+            profileName.textContent = currentUser.email.split('@')[0];
+            profileEmail.textContent = currentUser.email;
+            
+            const statusMap = {
+                'free': '🆓 Бесплатный',
+                'standard': '⭐ Стандарт',
+                'premium': '👑 Премиум'
+            };
+            profileStatus.textContent = statusMap[currentUser.subscription] || 'Бесплатный';
+            profileStatus.className = 'info-value ' + (currentUser.subscription !== 'free' ? 'active' : 'inactive');
+            
+            profileExpiry.textContent = currentUser.subscription_expiry 
+                ? new Date(currentUser.subscription_expiry).toLocaleDateString() 
+                : '—';
+            
+            const hours = Math.floor(freeTimeRemaining / 3600);
+            const minutes = Math.floor((freeTimeRemaining % 3600) / 60);
+            const seconds = freeTimeRemaining % 60;
+            profileFreeTime.textContent = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            profileGames.textContent = currentUser.games_played || 0;
+            
+            if (currentUser.subscription !== 'free' && currentUser.subscription_expiry) {
+                cancelSubscriptionBtn.style.display = 'block';
+            } else {
+                cancelSubscriptionBtn.style.display = 'none';
+            }
+            
+            profileModal.classList.add('active');
+        }
+
+        function closeProfileModal() {
+            profileModal.classList.remove('active');
+        }
+
+        // ============================================================
+        //  УПРАВЛЕНИЕ ПОДПИСКОЙ
+        // ============================================================
+        function subscribe(plan) {
+            if (!currentUser) {
+                openAuthModal('login');
+                showNotification('Сначала войдите в аккаунт!', 'error');
+                return;
+            }
+
+            const plans = {
+                'standard': { name: 'Стандарт', price: 490, days: 30 },
+                'premium': { name: 'Премиум', price: 990, days: 30 }
+            };
+
+            const planData = plans[plan];
+            if (!planData) return;
+
+            if (currentUser.subscription === plan) {
+                showNotification(`У вас уже активна подписка "${planData.name}"`, 'info');
+                return;
+            }
+
+            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) return;
+
+            const expiry = new Date();
+            expiry.setDate(expiry.getDate() + planData.days);
+
+            const updated = DB.updateUser(currentUser.email, {
+                subscription: plan,
+                subscription_expiry: expiry.toISOString()
+            });
+
+            if (updated) {
+                currentUser = updated;
+                updateUI();
+                addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`);
+                showNotification(`Тариф "${planData.name}" активирован!`, 'success');
+                updateTariffButtons();
+            }
+        }
+
+        function cancelSubscription() {
+            if (!currentUser || currentUser.subscription === 'free') return;
+
+            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) return;
+
+            const updated = DB.updateUser(currentUser.email, {
+                subscription: 'free',
+                subscription_expiry: null
+            });
+
+            if (updated) {
+                currentUser = updated;
+                updateUI();
+                updateTariffButtons();
+                closeProfileModal();
+                addLog('❌ Подписка отключена');
+                showNotification('Подписка отключена', 'info');
+            }
+        }
+
+        function updateTariffButtons() {
+            standardBtn.className = 'card-btn primary';
+            standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
+            premiumBtn.className = 'card-btn primary';
+            premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
+
+            if (currentUser) {
+                if (currentUser.subscription === 'standard') {
+                    standardBtn.className = 'card-btn active-subscription';
+                    standardBtn.innerHTML = '✅ Активно';
+                } else if (currentUser.subscription === 'premium') {
+                    premiumBtn.className = 'card-btn active-subscription';
+                    premiumBtn.innerHTML = '✅ Активно';
+                }
+            }
+        }
+
+        // ============================================================
+        //  ОБНОВЛЕНИЕ UI
+        // ============================================================
+        function updateUI() {
+            const user = DB.getCurrentUser();
+            currentUser = user;
+
+            if (user) {
+                loginBtn.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = user.email.split('@')[0];
+                userAvatar.textContent = user.email.charAt(0).toUpperCase();
+                
+                const statusMap = {
+                    'free': { text: '🆓 Бесплатно', class: 'free' },
+                    'standard': { text: '⭐ Стандарт', class: '' },
+                    'premium': { text: '👑 Премиум', class: '' }
+                };
+                const status = statusMap[user.subscription] || statusMap['free'];
+                userBadge.textContent = status.text;
+                userBadge.className = 'user-badge' + (status.class ? ' ' + status.class : '');
+                
+                updateTariffButtons();
+            } else {
+                loginBtn.style.display = 'block';
+                userMenu.style.display = 'none';
+                standardBtn.className = 'card-btn primary';
+                standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
+                premiumBtn.className = 'card-btn primary';
+                premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
+            }
+        }
+
+        // ============================================================
+        //  БЕСПЛАТНЫЙ ТАЙМЕР
+        // ============================================================
+        function startFreeTimer() {
+            if (freeTimerInterval) return;
+
+            isFreeActive = true;
+            freeTimeRemaining = 3600;
+            updateTimerDisplay();
+
+            freeTimerInterval = setInterval(() => {
+                freeTimeRemaining--;
+                updateTimerDisplay();
+
+                if (freeTimeRemaining <= 0) {
+                    clearInterval(freeTimerInterval);
+                    freeTimerInterval = null;
+                    isFreeActive = false;
+                    addLog('⏰ Бесплатное время закончилось!');
+                    freeActivateBtn.disabled = true;
+                    freeActivateBtn.textContent = '⏳ Бесплатный лимит исчерпан';
+                    timeLeftEl.textContent = '0:00:00';
+                    timeLeftEl.className = 'time-left urgent';
+                }
+
+                if (freeTimeRemaining < 300) {
+                    timeLeftEl.className = 'time-left urgent';
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(freeTimeRemaining / 3600);
+            const minutes = Math.floor((freeTimeRemaining % 3600) / 60);
+            const seconds = freeTimeRemaining % 60;
+            timeLeftEl.textContent = `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function activateFreeTrial() {
+            if (!currentUser) {
+                openAuthModal('login');
+                showNotification('Сначала войдите в аккаунт!', 'error');
+                return;
+            }
+
+            if (isFreeActive) {
+                addLog('ℹ️ Бесплатный доступ уже активирован');
+                return;
+            }
+
+            if (freeTimeRemaining <= 0) {
+                addLog('❌ Бесплатный лимит на сегодня исчерпан');
+                showNotification('Бесплатный лимит исчерпан!', 'error');
+                return;
+            }
+
+            startFreeTimer();
+            addLog('🎁 Активирован бесплатный доступ на 1 час!');
+            showNotification('Бесплатный доступ активирован!', 'success');
+        }
+
+        // ============================================================
+        //  ПОДКЛЮЧЕНИЕ
+        // ============================================================
+        function switchConnection(type) {
+            if (type === 'internet') {
+                showDevModal();
+                return;
+            }
+
+            connectionType = type;
+            
+            if (type === 'local') {
+                localBtn.classList.add('active');
+                ngrokBtn.classList.remove('active');
+                internetBtn.classList.remove('active');
+                serverInput.style.display = 'block';
+                ngrokInput.classList.remove('visible');
+                document.getElementById('internetInput').classList.remove('visible');
+                API_URL = 'http://127.0.0.1:5000';
+                connectionTypeDisplay.textContent = 'Локальное';
+                connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
+                addLog('🔗 Переключено на локальное подключение');
+            } else if (type === 'ngrok') {
+                ngrokBtn.classList.add('active');
+                localBtn.classList.remove('active');
+                internetBtn.classList.remove('active');
+                serverInput.style.display = 'none';
+                ngrokInput.classList.add('visible');
+                document.getElementById('internetInput').classList.remove('visible');
+                const ngrokUrl = ngrokInput.value.trim() || 'https://your-ngrok-url.ngrok.io';
+                API_URL = ngrokUrl;
+                connectionTypeDisplay.textContent = 'ngrok';
+                connectionUrlDisplay.textContent = ` (${ngrokUrl})`;
+                addLog(`🌐 Переключено на ngrok: ${ngrokUrl}`);
+            }
+        }
+
+        ngrokInput.addEventListener('input', function() {
+            if (connectionType === 'ngrok') {
+                const url = this.value.trim() || 'https://your-ngrok-url.ngrok.io';
+                API_URL = url;
+                connectionUrlDisplay.textContent = ` (${url})`;
+            }
+        });
+
+        // ============================================================
+        //  ЛАУНЧЕР
+        // ============================================================
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logArea.innerHTML += `[${timestamp}] ${message}\n`;
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+
+        function updateStatus(isOnline, details = '') {
+            if (isOnline) {
+                statusDot.className = 'status-dot online';
+                statusText.textContent = details || 'Игра запущена';
+                launchBtn.disabled = true;
+                launchBtn.textContent = '⏳ Игра активна';
+            } else {
+                statusDot.className = 'status-dot';
+                statusText.textContent = 'Сервер отключён';
+                launchBtn.disabled = false;
+                launchBtn.textContent = '🚀 Запустить CS';
+            }
+        }
+
+        async function apiRequest(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if (data) options.body = JSON.stringify(data);
+
+                const response = await fetch(`${API_URL}${endpoint}`, {
+                    ...options,
+                    mode: 'cors'
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                return await response.json();
+            } catch (error) {
+                addLog(`❌ Ошибка API: ${error.message}`);
+                return null;
+            }
+        }
+
+        async function launchGame() {
+            if (!currentUser) {
+                openAuthModal('login');
+                showNotification('Сначала войдите в аккаунт!', 'error');
+                return;
+            }
+
+            if (connectionType === 'internet') {
+                showDevModal();
+                return;
+            }
+
+            if (currentUser.subscription === 'free' && !isFreeActive && freeTimeRemaining <= 0) {
+                addLog('❌ Бесплатное время закончилось. Выберите платный тариф.');
+                showNotification('Бесплатное время закончилось!', 'error');
+                return;
+            }
+
+            let server = '';
+            if (connectionType === 'local') {
+                server = serverInput.value.trim() || '127.0.0.1:27015';
+            } else {
+                const ngrokUrl = ngrokInput.value.trim();
+                if (!ngrokUrl) {
+                    addLog('❌ Введите ngrok URL');
+                    showNotification('Введите ngrok URL!', 'error');
+                    return;
+                }
+                server = ngrokUrl;
+            }
+
+            addLog(`🔄 Запуск CS на ${connectionType === 'local' ? 'сервере' : 'ngrok'} ${server}...`);
+            launchBtn.disabled = true;
+            launchBtn.textContent = '⏳ Запуск...';
+
+            const result = await apiRequest('/launch', 'POST', { 
+                server: server,
+                connection_type: connectionType 
+            });
+
+            if (result && result.status === 'ok') {
+                addLog(`✅ CS запущен! PID: ${result.pid || '?'}`);
+                updateStatus(true, `Запущен (${connectionType})`);
+                startPolling();
+                
+                if (currentUser) {
+                    const updated = DB.updateUser(currentUser.email, {
+                        games_played: (currentUser.games_played || 0) + 1
+                    });
+                    if (updated) currentUser = updated;
+                }
+            } else {
+                addLog(`❌ Ошибка запуска: ${result?.error || 'Неизвестная ошибка'}`);
+                launchBtn.disabled = false;
+                launchBtn.textContent = '🚀 Запустить CS';
+            }
+        }
+
+        async function stopGame() {
+            addLog('⏹ Остановка CS...');
+            const result = await apiRequest('/stop', 'POST');
+
+            if (result && result.status === 'ok') {
+                addLog('✅ CS остановлен');
+                updateStatus(false);
+                stopPolling();
+            } else {
+                addLog(`❌ Ошибка остановки: ${result?.error || 'Неизвестная ошибка'}`);
+            }
+            launchBtn.disabled = false;
+            launchBtn.textContent = '🚀 Запустить CS';
+        }
+
+        async function getStatus() {
+            const result = await apiRequest('/status');
+            if (result) {
+                if (result.running) {
+                    updateStatus(true, `Запущен (PID: ${result.pid})`);
+                } else {
+                    updateStatus(false);
+                }
+            }
+        }
+
+        function startPolling() {
+            if (pollingInterval) clearInterval(pollingInterval);
+            pollingInterval = setInterval(getStatus, 3000);
+            getStatus();
+        }
+
+        function stopPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            }
+        }
+
+        // ============================================================
+        //  МОДАЛЬНЫЕ ОКНА
+        // ============================================================
+        function showDevModal() {
+            devModalOverlay.classList.add('active');
+            addLog('ℹ️ Функция "Интернет" в разработке');
+        }
+
+        function closeDevModal() {
+            devModalOverlay.classList.remove('active');
+        }
+
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: '#51cf66',
+                error: '#ff6b6b',
+                info: '#ffa94d'
+            };
+
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                padding: 15px 25px;
+                background: #1a1a2e;
+                border-left: 4px solid ${colors[type] || '#ffa94d'};
+                border-radius: 12px;
+                color: #fff;
+                z-index: 3000;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                animation: modalIn 0.3s ease;
+                max-width: 350px;
+                font-size: 14px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                notification.style.transition = 'all 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // ============================================================
+        //  ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО КЛИКУ ВНЕ
+        // ============================================================
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) closeAuthModal();
+        });
+
+        profileModal.addEventListener('click', (e) => {
+            if (e.target === profileModal) closeProfileModal();
+        });
+
+        devModalOverlay.addEventListener('click', (e) => {
+            if (e.target === devModalOverlay) closeDevModal();
+        });
+
+        // ============================================================
+        //  НАВБАР ПРИ СКРОЛЛЕ
+        // ============================================================
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ============================================================
+        //  ПЛАВНЫЙ СКРОЛЛ
+        // ============================================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // ============================================================
+        //  ИНИЦИАЛИЗАЦИЯ
+        // ============================================================
+        function init() {
+            currentUser = DB.getCurrentUser();
+            updateUI();
+
+            if (currentUser && currentUser.subscription_expiry) {
+                const expiry = new Date(currentUser.subscription_expiry);
+                if (expiry < new Date()) {
+                    const updated = DB.updateUser(currentUser.email, {
+                        subscription: 'free',
+                        subscription_expiry: null
+                    });
+                    if (updated) {
+                        currentUser = updated;
+                        updateUI();
+                        addLog('⏰ Подписка истекла, переключено на бесплатный тариф');
+                    }
+                }
+            }
+
+            addLog('🌐 CloudCS Лаунчер загружен');
+            addLog('💡 Войдите в аккаунт для управления подпиской');
+            addLog('🎮 Активируйте бесплатный доступ на 1 час');
+
+            connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
+            getStatus();
+
+            console.log('🚀 CloudCS готов к работе!');
+            console.log('📌 Пользователи хранятся в localStorage');
+        }
+
+        init();
+    </script>
+</body>
+</html>
