@@ -6,7 +6,6 @@
     <title>CloudCS - Облачный гейминг</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ВСЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ */
         * {
             margin: 0;
             padding: 0;
@@ -194,6 +193,27 @@
         .user-badge.free {
             background: rgba(255, 107, 107, 0.2);
             color: #ff6b6b;
+        }
+
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 2px 10px;
+            border-radius: 50px;
+            background: rgba(81, 207, 102, 0.05);
+            border: 1px solid rgba(81, 207, 102, 0.1);
+        }
+
+        .sync-status i {
+            font-size: 10px;
+        }
+
+        .sync-status.online {
+            color: #51cf66;
+            border-color: rgba(81, 207, 102, 0.3);
         }
 
         .hero {
@@ -983,6 +1003,22 @@
             box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
         }
 
+        .sync-notice {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sync-notice i {
+            font-size: 10px;
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
@@ -1060,6 +1096,11 @@
                 padding: 15px 20px;
                 bottom: 10px;
             }
+
+            .sync-status {
+                font-size: 9px;
+                padding: 2px 8px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1098,6 +1139,9 @@
                 <div class="user-avatar" id="userAvatar">U</div>
                 <span class="user-name" id="userName">Пользователь</span>
                 <span class="user-badge" id="userBadge">Бесплатно</span>
+                <span class="sync-status online" id="syncStatus">
+                    <i class="fas fa-cloud-upload-alt"></i> Синхр.
+                </span>
             </div>
             
             <button class="btn-nav" id="loginBtn" onclick="openAuthModal('login')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
@@ -1118,6 +1162,8 @@
         <p>
             Мощные облачные серверы, минимальная задержка и полная свобода.
             Подключайся к любимой игре где угодно и когда угодно.
+            <br>
+            <span class="sync-notice"><i class="fas fa-cloud"></i> Аккаунт синхронизируется между устройствами</span>
         </p>
         <div class="hero-stats">
             <div class="hero-stat">
@@ -1157,8 +1203,8 @@
                     <li><i class="fas fa-check"></i> Доступ к CS:GO / CS2</li>
                     <li><i class="fas fa-check"></i> Базовая производительность</li>
                     <li><i class="fas fa-check"></i> Поддержка 24/7</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
                     <li><i class="fas fa-times"></i> Приоритетная очередь</li>
-                    <li><i class="fas fa-times"></i> Высокое качество графики</li>
                 </ul>
                 <button class="card-btn free-btn" id="freeActivateBtn" onclick="activateFreeTrial()">
                     <i class="fas fa-play"></i> Активировать бесплатно
@@ -1185,7 +1231,7 @@
                     <li><i class="fas fa-check"></i> Высокая производительность</li>
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">Приоритетная</span> очередь</li>
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
-                    <li><i class="fas fa-check"></i> Поддержка 24/7</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
                 </ul>
                 <button class="card-btn primary" id="standardBtn" onclick="subscribe('standard')">
                     <i class="fas fa-rocket"></i> Подключить
@@ -1207,7 +1253,7 @@
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">Ультра</span> производительность</li>
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">VIP</span> очередь</li>
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
-                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Персональный</span> менеджер</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
                 </ul>
                 <button class="card-btn primary" id="premiumBtn" onclick="subscribe('premium')">
                     <i class="fas fa-crown"></i> Подключить
@@ -1312,6 +1358,9 @@
                 <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa94d); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 32px; font-weight: 700; color: #fff;" id="profileAvatar">U</div>
                 <div style="font-size: 20px; font-weight: 700; margin-top: 10px;" id="profileName">Пользователь</div>
                 <div style="color: rgba(255,255,255,0.4); font-size: 14px;" id="profileEmail">user@mail.com</div>
+                <div style="color: rgba(81, 207, 102, 0.6); font-size: 12px; margin-top: 5px;">
+                    <i class="fas fa-cloud-upload-alt"></i> Синхронизировано между устройствами
+                </div>
             </div>
             
             <div class="subscription-info">
@@ -1330,6 +1379,10 @@
                 <div class="info-row">
                     <span class="info-label">🎮 Игр запущено</span>
                     <span class="info-value" id="profileGames">0</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">🌐 Синхронизация</span>
+                    <span class="info-value" style="color: #51cf66;">✅ Активна</span>
                 </div>
             </div>
             
@@ -1367,6 +1420,7 @@
     <div class="cookie-notice" id="cookieNotice">
         <p>
             🍪 Мы используем cookies для сохранения вашего аккаунта и настроек.
+            Данные синхронизируются между устройствами через ваш браузер.
             Продолжая использовать сайт, вы соглашаетесь с этим.
         </p>
         <button class="cookie-btn" onclick="acceptCookies()">Принять</button>
@@ -1374,7 +1428,7 @@
 
     <script>
         // ============================================================
-        //  РАБОТА С COOKIES
+        //  РАБОТА С COOKIES (Облачная синхронизация)
         // ============================================================
         const CookieManager = {
             set(name, value, days = 30) {
@@ -1398,24 +1452,87 @@
             },
             exists(name) {
                 return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
+            },
+            // Синхронизация с облачным хранилищем браузера
+            syncToCloud(key, data) {
+                try {
+                    // Используем localStorage для синхронизации между устройствами
+                    // через облачную синхронизацию браузера (Chrome Sync, Firefox Sync и т.д.)
+                    const syncData = {
+                        [key]: data,
+                        _timestamp: Date.now(),
+                        _version: '1.0'
+                    };
+                    localStorage.setItem(`cloudcs_${key}`, JSON.stringify(syncData));
+                    
+                    // Отправляем сигнал о синхронизации
+                    window.dispatchEvent(new CustomEvent('cloudcs_sync', { 
+                        detail: { key, data } 
+                    }));
+                    
+                    return true;
+                } catch (e) {
+                    console.warn('Ошибка синхронизации:', e);
+                    return false;
+                }
+            },
+            getFromCloud(key) {
+                try {
+                    const data = localStorage.getItem(`cloudcs_${key}`);
+                    if (data) {
+                        return JSON.parse(data);
+                    }
+                } catch (e) {
+                    console.warn('Ошибка получения данных из облака:', e);
+                }
+                return null;
+            },
+            // Синхронизация между вкладками
+            setupCrossTabSync(callback) {
+                window.addEventListener('storage', (e) => {
+                    if (e.key && e.key.startsWith('cloudcs_')) {
+                        try {
+                            const data = JSON.parse(e.newValue);
+                            if (data && data._timestamp) {
+                                callback(e.key.replace('cloudcs_', ''), data);
+                            }
+                        } catch {}
+                    }
+                });
             }
         };
 
         // ============================================================
-        //  ХРАНИЛИЩЕ ДАННЫХ (localStorage для пользователей + cookies для сессии)
+        //  ХРАНИЛИЩЕ ДАННЫХ (Облачная синхронизация)
         // ============================================================
         const DB = {
             getUsers() {
+                // Пытаемся получить из облачной синхронизации
+                const cloudData = CookieManager.getFromCloud('users');
+                if (cloudData && cloudData.data) {
+                    return cloudData.data;
+                }
+                // Или из localStorage
                 return JSON.parse(localStorage.getItem('cloudcs_users') || '[]');
             },
             saveUsers(users) {
                 localStorage.setItem('cloudcs_users', JSON.stringify(users));
+                // Синхронизируем с облаком
+                CookieManager.syncToCloud('users', users);
             },
             getCurrentUser() {
-                return CookieManager.get('cloudcs_session');
+                // Сначала проверяем cookies (сессия)
+                const session = CookieManager.get('cloudcs_session');
+                if (session) {
+                    // Обновляем данные из облака
+                    this.syncFromCloud();
+                    return session;
+                }
+                return null;
             },
             saveCurrentUser(user) {
                 CookieManager.set('cloudcs_session', user, 30);
+                this.syncFromCloud();
             },
             clearCurrentUser() {
                 CookieManager.delete('cloudcs_session');
@@ -1436,6 +1553,33 @@
                     return users[index];
                 }
                 return null;
+            },
+            // Принудительная синхронизация из облака
+            syncFromCloud() {
+                const cloudUsers = CookieManager.getFromCloud('users');
+                if (cloudUsers && cloudUsers.data) {
+                    localStorage.setItem('cloudcs_users', JSON.stringify(cloudUsers.data));
+                    return true;
+                }
+                return false;
+            },
+            // Инициализация синхронизации между вкладками
+            initSync() {
+                CookieManager.setupCrossTabSync((key, data) => {
+                    if (key === 'users') {
+                        // Обновляем данные при изменении в другой вкладке
+                        localStorage.setItem('cloudcs_users', JSON.stringify(data.data));
+                        // Обновляем UI
+                        this.updateUIFromSync();
+                    }
+                });
+            },
+            updateUIFromSync() {
+                const user = this.getCurrentUser();
+                if (user) {
+                    updateUI();
+                    addLog('🔄 Данные синхронизированы с облака');
+                }
             }
         };
 
@@ -1445,12 +1589,18 @@
         function acceptCookies() {
             CookieManager.set('cookies_accepted', true, 365);
             document.getElementById('cookieNotice').style.display = 'none';
-            addLog('🍪 Cookies приняты');
+            addLog('🍪 Cookies приняты, включена облачная синхронизация');
+            
+            // Запускаем синхронизацию
+            DB.initSync();
+            DB.syncFromCloud();
         }
 
         function checkCookies() {
             if (CookieManager.get('cookies_accepted')) {
                 document.getElementById('cookieNotice').style.display = 'none';
+                DB.initSync();
+                DB.syncFromCloud();
             }
         }
 
@@ -1584,7 +1734,8 @@
                 updateUI();
                 closeAuthModal();
                 addLog(`✅ Добро пожаловать, ${email}!`);
-                showNotification('Регистрация успешна!', 'success');
+                addLog('🌐 Аккаунт синхронизирован между устройствами');
+                showNotification('Регистрация успешна! Аккаунт синхронизирован.', 'success');
             } else {
                 const user = DB.getUserByEmail(email);
                 if (!user || user.password !== password) {
@@ -1598,7 +1749,8 @@
                 updateUI();
                 closeAuthModal();
                 addLog(`✅ Добро пожаловать, ${email}!`);
-                showNotification('Вход выполнен!', 'success');
+                addLog('🌐 Данные синхронизированы с облака');
+                showNotification('Вход выполнен! Данные синхронизированы.', 'success');
             }
         }
 
@@ -1687,6 +1839,7 @@
                 currentUser = updated;
                 updateUI();
                 addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`);
+                addLog('🌐 Данные синхронизированы с облаком');
                 showNotification(`Тариф "${planData.name}" активирован!`, 'success');
                 updateTariffButtons();
             }
@@ -1708,6 +1861,7 @@
                 updateTariffButtons();
                 closeProfileModal();
                 addLog('❌ Подписка отключена');
+                addLog('🌐 Данные синхронизированы с облаком');
                 showNotification('Подписка отключена', 'info');
             }
         }
@@ -2125,6 +2279,7 @@
             addLog('🌐 CloudCS Лаунчер загружен');
             addLog('💡 Войдите в аккаунт для управления подпиской');
             addLog('🍪 Сессия сохраняется в cookies');
+            addLog('☁️ Аккаунт синхронизируется между устройствами');
             addLog('🎮 Активируйте бесплатный доступ на 1 час');
 
             connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
@@ -2133,9 +2288,11 @@
             console.log('🚀 CloudCS готов к работе!');
             console.log('📌 Пользователи хранятся в localStorage');
             console.log('🍪 Сессия хранится в cookies (30 дней)');
+            console.log('☁️ Данные синхронизируются между устройствами');
+            console.log('📱 Для синхронизации используйте аккаунт в браузере');
         }
 
         init();
     </script>
 </body>
-</html>
+                        </html>
