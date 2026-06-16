@@ -195,27 +195,6 @@
             color: #ff6b6b;
         }
 
-        .sync-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-            padding: 2px 10px;
-            border-radius: 50px;
-            background: rgba(81, 207, 102, 0.05);
-            border: 1px solid rgba(81, 207, 102, 0.1);
-        }
-
-        .sync-status i {
-            font-size: 10px;
-        }
-
-        .sync-status.online {
-            color: #51cf66;
-            border-color: rgba(81, 207, 102, 0.3);
-        }
-
         .hero {
             padding: 140px 50px 80px;
             text-align: center;
@@ -443,6 +422,13 @@
             box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
         }
 
+        .card-btn.primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
         .card-btn.secondary {
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
@@ -463,10 +449,11 @@
             box-shadow: 0 8px 30px rgba(81, 207, 102, 0.3);
         }
 
-        .card-btn:disabled {
+        .card-btn.free-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
+            box-shadow: none !important;
         }
 
         .card-btn.active-subscription {
@@ -863,6 +850,17 @@
             background: rgba(255, 107, 107, 0.25);
         }
 
+        .modal .modal-btn.vk {
+            background: #2787f5;
+            color: #fff;
+        }
+
+        .modal .modal-btn.vk:hover {
+            background: #1a6bc7;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(39, 135, 245, 0.4);
+        }
+
         .modal .form-group {
             margin-bottom: 15px;
             text-align: left;
@@ -910,6 +908,29 @@
 
         .modal .auth-switch span:hover {
             text-decoration: underline;
+        }
+
+        .modal .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+        }
+
+        .modal .divider::before,
+        .modal .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .modal .divider::before {
+            margin-right: 15px;
+        }
+
+        .modal .divider::after {
+            margin-left: 15px;
         }
 
         .modal .subscription-info {
@@ -1003,22 +1024,6 @@
             box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
         }
 
-        .sync-notice {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.3);
-            padding: 4px 12px;
-            border-radius: 50px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .sync-notice i {
-            font-size: 10px;
-        }
-
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
@@ -1096,11 +1101,6 @@
                 padding: 15px 20px;
                 bottom: 10px;
             }
-
-            .sync-status {
-                font-size: 9px;
-                padding: 2px 8px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1139,9 +1139,6 @@
                 <div class="user-avatar" id="userAvatar">U</div>
                 <span class="user-name" id="userName">Пользователь</span>
                 <span class="user-badge" id="userBadge">Бесплатно</span>
-                <span class="sync-status online" id="syncStatus">
-                    <i class="fas fa-cloud-upload-alt"></i> Синхр.
-                </span>
             </div>
             
             <button class="btn-nav" id="loginBtn" onclick="openAuthModal('login')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
@@ -1162,8 +1159,6 @@
         <p>
             Мощные облачные серверы, минимальная задержка и полная свобода.
             Подключайся к любимой игре где угодно и когда угодно.
-            <br>
-            <span class="sync-notice"><i class="fas fa-cloud"></i> Аккаунт синхронизируется между устройствами</span>
         </p>
         <div class="hero-stats">
             <div class="hero-stat">
@@ -1189,6 +1184,7 @@
         </div>
 
         <div class="pricing-grid">
+            <!-- Бесплатный -->
             <div class="pricing-card">
                 <div class="card-icon">
                     <i class="fas fa-gift"></i>
@@ -1203,8 +1199,8 @@
                     <li><i class="fas fa-check"></i> Доступ к CS:GO / CS2</li>
                     <li><i class="fas fa-check"></i> Базовая производительность</li>
                     <li><i class="fas fa-check"></i> Поддержка 24/7</li>
-                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
                     <li><i class="fas fa-times"></i> Приоритетная очередь</li>
+                    <li><i class="fas fa-times"></i> Высокое качество графики</li>
                 </ul>
                 <button class="card-btn free-btn" id="freeActivateBtn" onclick="activateFreeTrial()">
                     <i class="fas fa-play"></i> Активировать бесплатно
@@ -1215,6 +1211,7 @@
                 </div>
             </div>
 
+            <!-- Стандарт -->
             <div class="pricing-card popular">
                 <div class="card-badge">🔥 Популярный</div>
                 <div class="card-icon">
@@ -1231,13 +1228,14 @@
                     <li><i class="fas fa-check"></i> Высокая производительность</li>
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">Приоритетная</span> очередь</li>
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
-                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
+                    <li><i class="fas fa-check"></i> Поддержка 24/7</li>
                 </ul>
                 <button class="card-btn primary" id="standardBtn" onclick="subscribe('standard')">
                     <i class="fas fa-rocket"></i> Подключить
                 </button>
             </div>
 
+            <!-- Премиум -->
             <div class="pricing-card">
                 <div class="card-icon">
                     <i class="fas fa-crown"></i>
@@ -1253,7 +1251,7 @@
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">Ультра</span> производительность</li>
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">VIP</span> очередь</li>
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
-                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Синхронизация</span> между устройствами</li>
+                    <li><i class="fas fa-check"></i> <span class="highlight-feature">Персональный</span> менеджер</li>
                 </ul>
                 <button class="card-btn primary" id="premiumBtn" onclick="subscribe('premium')">
                     <i class="fas fa-crown"></i> Подключить
@@ -1341,6 +1339,12 @@
                 <i class="fas fa-sign-in-alt"></i> Войти
             </button>
             
+            <div class="divider">или</div>
+            
+            <button class="modal-btn vk" onclick="loginWithVK()">
+                <i class="fab fa-vk"></i> Войти через VK ID
+            </button>
+            
             <div class="auth-switch">
                 <span id="authSwitchText">Нет аккаунта? <span onclick="switchAuthMode()">Зарегистрироваться</span></span>
             </div>
@@ -1358,9 +1362,6 @@
                 <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa94d); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 32px; font-weight: 700; color: #fff;" id="profileAvatar">U</div>
                 <div style="font-size: 20px; font-weight: 700; margin-top: 10px;" id="profileName">Пользователь</div>
                 <div style="color: rgba(255,255,255,0.4); font-size: 14px;" id="profileEmail">user@mail.com</div>
-                <div style="color: rgba(81, 207, 102, 0.6); font-size: 12px; margin-top: 5px;">
-                    <i class="fas fa-cloud-upload-alt"></i> Синхронизировано между устройствами
-                </div>
             </div>
             
             <div class="subscription-info">
@@ -1379,10 +1380,6 @@
                 <div class="info-row">
                     <span class="info-label">🎮 Игр запущено</span>
                     <span class="info-value" id="profileGames">0</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">🌐 Синхронизация</span>
-                    <span class="info-value" style="color: #51cf66;">✅ Активна</span>
                 </div>
             </div>
             
@@ -1420,7 +1417,6 @@
     <div class="cookie-notice" id="cookieNotice">
         <p>
             🍪 Мы используем cookies для сохранения вашего аккаунта и настроек.
-            Данные синхронизируются между устройствами через ваш браузер.
             Продолжая использовать сайт, вы соглашаетесь с этим.
         </p>
         <button class="cookie-btn" onclick="acceptCookies()">Принять</button>
@@ -1428,7 +1424,7 @@
 
     <script>
         // ============================================================
-        //  РАБОТА С COOKIES (Облачная синхронизация)
+        //  РАБОТА С COOKIES
         // ============================================================
         const CookieManager = {
             set(name, value, days = 30) {
@@ -1452,87 +1448,24 @@
             },
             exists(name) {
                 return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
-            },
-            // Синхронизация с облачным хранилищем браузера
-            syncToCloud(key, data) {
-                try {
-                    // Используем localStorage для синхронизации между устройствами
-                    // через облачную синхронизацию браузера (Chrome Sync, Firefox Sync и т.д.)
-                    const syncData = {
-                        [key]: data,
-                        _timestamp: Date.now(),
-                        _version: '1.0'
-                    };
-                    localStorage.setItem(`cloudcs_${key}`, JSON.stringify(syncData));
-                    
-                    // Отправляем сигнал о синхронизации
-                    window.dispatchEvent(new CustomEvent('cloudcs_sync', { 
-                        detail: { key, data } 
-                    }));
-                    
-                    return true;
-                } catch (e) {
-                    console.warn('Ошибка синхронизации:', e);
-                    return false;
-                }
-            },
-            getFromCloud(key) {
-                try {
-                    const data = localStorage.getItem(`cloudcs_${key}`);
-                    if (data) {
-                        return JSON.parse(data);
-                    }
-                } catch (e) {
-                    console.warn('Ошибка получения данных из облака:', e);
-                }
-                return null;
-            },
-            // Синхронизация между вкладками
-            setupCrossTabSync(callback) {
-                window.addEventListener('storage', (e) => {
-                    if (e.key && e.key.startsWith('cloudcs_')) {
-                        try {
-                            const data = JSON.parse(e.newValue);
-                            if (data && data._timestamp) {
-                                callback(e.key.replace('cloudcs_', ''), data);
-                            }
-                        } catch {}
-                    }
-                });
             }
         };
 
         // ============================================================
-        //  ХРАНИЛИЩЕ ДАННЫХ (Облачная синхронизация)
+        //  ХРАНИЛИЩЕ ДАННЫХ
         // ============================================================
         const DB = {
             getUsers() {
-                // Пытаемся получить из облачной синхронизации
-                const cloudData = CookieManager.getFromCloud('users');
-                if (cloudData && cloudData.data) {
-                    return cloudData.data;
-                }
-                // Или из localStorage
                 return JSON.parse(localStorage.getItem('cloudcs_users') || '[]');
             },
             saveUsers(users) {
                 localStorage.setItem('cloudcs_users', JSON.stringify(users));
-                // Синхронизируем с облаком
-                CookieManager.syncToCloud('users', users);
             },
             getCurrentUser() {
-                // Сначала проверяем cookies (сессия)
-                const session = CookieManager.get('cloudcs_session');
-                if (session) {
-                    // Обновляем данные из облака
-                    this.syncFromCloud();
-                    return session;
-                }
-                return null;
+                return CookieManager.get('cloudcs_session');
             },
             saveCurrentUser(user) {
                 CookieManager.set('cloudcs_session', user, 30);
-                this.syncFromCloud();
             },
             clearCurrentUser() {
                 CookieManager.delete('cloudcs_session');
@@ -1554,32 +1487,9 @@
                 }
                 return null;
             },
-            // Принудительная синхронизация из облака
-            syncFromCloud() {
-                const cloudUsers = CookieManager.getFromCloud('users');
-                if (cloudUsers && cloudUsers.data) {
-                    localStorage.setItem('cloudcs_users', JSON.stringify(cloudUsers.data));
-                    return true;
-                }
-                return false;
-            },
-            // Инициализация синхронизации между вкладками
-            initSync() {
-                CookieManager.setupCrossTabSync((key, data) => {
-                    if (key === 'users') {
-                        // Обновляем данные при изменении в другой вкладке
-                        localStorage.setItem('cloudcs_users', JSON.stringify(data.data));
-                        // Обновляем UI
-                        this.updateUIFromSync();
-                    }
-                });
-            },
-            updateUIFromSync() {
-                const user = this.getCurrentUser();
-                if (user) {
-                    updateUI();
-                    addLog('🔄 Данные синхронизированы с облака');
-                }
+            // VK ID пользователи
+            getUserByVKId(vkId) {
+                return this.getUsers().find(u => u.vk_id === vkId);
             }
         };
 
@@ -1589,19 +1499,54 @@
         function acceptCookies() {
             CookieManager.set('cookies_accepted', true, 365);
             document.getElementById('cookieNotice').style.display = 'none';
-            addLog('🍪 Cookies приняты, включена облачная синхронизация');
-            
-            // Запускаем синхронизацию
-            DB.initSync();
-            DB.syncFromCloud();
+            addLog('🍪 Cookies приняты');
         }
 
         function checkCookies() {
             if (CookieManager.get('cookies_accepted')) {
                 document.getElementById('cookieNotice').style.display = 'none';
-                DB.initSync();
-                DB.syncFromCloud();
             }
+        }
+
+        // ============================================================
+        //  VK ID АВТОРИЗАЦИЯ
+        // ============================================================
+        function loginWithVK() {
+            // Создаём демо-данные для VK ID
+            // В реальном проекте здесь был бы OAuth-запрос к VK API
+            const vkId = 'vk_' + Date.now().toString(36);
+            const vkEmail = 'vk_user_' + Date.now().toString(36).substring(0, 8) + '@vk.com';
+            const vkName = 'VK User';
+
+            // Проверяем, есть ли уже пользователь с таким VK ID
+            let user = DB.getUserByVKId(vkId);
+            
+            if (!user) {
+                // Создаём нового пользователя
+                user = {
+                    email: vkEmail,
+                    username: vkName,
+                    vk_id: vkId,
+                    password: 'vk_' + Date.now().toString(36),
+                    subscription: 'free',
+                    subscription_expiry: null,
+                    games_played: 0,
+                    created_at: new Date().toISOString()
+                };
+
+                const users = DB.getUsers();
+                users.push(user);
+                DB.saveUsers(users);
+                addLog(`✅ Создан аккаунт через VK ID: ${vkName}`);
+            }
+
+            // Вход
+            DB.saveCurrentUser(user);
+            currentUser = user;
+            updateUI();
+            closeAuthModal();
+            addLog(`✅ Добро пожаловать, ${user.username || user.email}!`);
+            showNotification('Вход через VK ID выполнен!', 'success');
         }
 
         // ============================================================
@@ -1734,8 +1679,7 @@
                 updateUI();
                 closeAuthModal();
                 addLog(`✅ Добро пожаловать, ${email}!`);
-                addLog('🌐 Аккаунт синхронизирован между устройствами');
-                showNotification('Регистрация успешна! Аккаунт синхронизирован.', 'success');
+                showNotification('Регистрация успешна!', 'success');
             } else {
                 const user = DB.getUserByEmail(email);
                 if (!user || user.password !== password) {
@@ -1749,8 +1693,7 @@
                 updateUI();
                 closeAuthModal();
                 addLog(`✅ Добро пожаловать, ${email}!`);
-                addLog('🌐 Данные синхронизированы с облака');
-                showNotification('Вход выполнен! Данные синхронизированы.', 'success');
+                showNotification('Вход выполнен!', 'success');
             }
         }
 
@@ -1766,8 +1709,9 @@
         function openProfileModal() {
             if (!currentUser) return;
             
-            profileAvatar.textContent = currentUser.email.charAt(0).toUpperCase();
-            profileName.textContent = currentUser.email.split('@')[0];
+            const displayName = currentUser.username || currentUser.email.split('@')[0];
+            profileAvatar.textContent = displayName.charAt(0).toUpperCase();
+            profileName.textContent = displayName;
             profileEmail.textContent = currentUser.email;
             
             const statusMap = {
@@ -1803,9 +1747,10 @@
         }
 
         // ============================================================
-        //  УПРАВЛЕНИЕ ПОДПИСКОЙ
+        //  УПРАВЛЕНИЕ ПОДПИСКОЙ (ИСПРАВЛЕНО)
         // ============================================================
         function subscribe(plan) {
+            // Проверка авторизации
             if (!currentUser) {
                 openAuthModal('login');
                 showNotification('Сначала войдите в аккаунт!', 'error');
@@ -1818,18 +1763,27 @@
             };
 
             const planData = plans[plan];
-            if (!planData) return;
+            if (!planData) {
+                showNotification('Тариф не найден!', 'error');
+                return;
+            }
 
+            // Проверяем, не активна ли уже эта подписка
             if (currentUser.subscription === plan) {
                 showNotification(`У вас уже активна подписка "${planData.name}"`, 'info');
                 return;
             }
 
-            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) return;
+            // Подтверждение
+            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) {
+                return;
+            }
 
+            // Вычисляем дату окончания
             const expiry = new Date();
             expiry.setDate(expiry.getDate() + planData.days);
 
+            // Обновляем пользователя
             const updated = DB.updateUser(currentUser.email, {
                 subscription: plan,
                 subscription_expiry: expiry.toISOString()
@@ -1839,16 +1793,22 @@
                 currentUser = updated;
                 updateUI();
                 addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`);
-                addLog('🌐 Данные синхронизированы с облаком');
                 showNotification(`Тариф "${planData.name}" активирован!`, 'success');
                 updateTariffButtons();
+            } else {
+                showNotification('Ошибка при активации тарифа!', 'error');
             }
         }
 
         function cancelSubscription() {
-            if (!currentUser || currentUser.subscription === 'free') return;
+            if (!currentUser || currentUser.subscription === 'free') {
+                showNotification('У вас нет активной подписки', 'info');
+                return;
+            }
 
-            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) return;
+            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) {
+                return;
+            }
 
             const updated = DB.updateUser(currentUser.email, {
                 subscription: 'free',
@@ -1861,24 +1821,31 @@
                 updateTariffButtons();
                 closeProfileModal();
                 addLog('❌ Подписка отключена');
-                addLog('🌐 Данные синхронизированы с облаком');
                 showNotification('Подписка отключена', 'info');
+            } else {
+                showNotification('Ошибка при отключении подписки!', 'error');
             }
         }
 
         function updateTariffButtons() {
+            // Сбрасываем все кнопки
             standardBtn.className = 'card-btn primary';
             standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
+            standardBtn.disabled = false;
+            
             premiumBtn.className = 'card-btn primary';
             premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
+            premiumBtn.disabled = false;
 
             if (currentUser) {
                 if (currentUser.subscription === 'standard') {
                     standardBtn.className = 'card-btn active-subscription';
                     standardBtn.innerHTML = '✅ Активно';
+                    standardBtn.disabled = true;
                 } else if (currentUser.subscription === 'premium') {
                     premiumBtn.className = 'card-btn active-subscription';
                     premiumBtn.innerHTML = '✅ Активно';
+                    premiumBtn.disabled = true;
                 }
             }
         }
@@ -1893,8 +1860,9 @@
             if (user) {
                 loginBtn.style.display = 'none';
                 userMenu.style.display = 'flex';
-                userName.textContent = user.email.split('@')[0];
-                userAvatar.textContent = user.email.charAt(0).toUpperCase();
+                const displayName = user.username || user.email.split('@')[0];
+                userName.textContent = displayName;
+                userAvatar.textContent = displayName.charAt(0).toUpperCase();
                 
                 const statusMap = {
                     'free': { text: '🆓 Бесплатно', class: 'free' },
@@ -1911,8 +1879,10 @@
                 userMenu.style.display = 'none';
                 standardBtn.className = 'card-btn primary';
                 standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
+                standardBtn.disabled = false;
                 premiumBtn.className = 'card-btn primary';
                 premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
+                premiumBtn.disabled = false;
             }
         }
 
@@ -2253,14 +2223,11 @@
         //  ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         function init() {
-            // Проверяем согласие на cookies
             checkCookies();
             
-            // Загружаем пользователя из cookies
             currentUser = DB.getCurrentUser();
             updateUI();
 
-            // Проверяем подписку
             if (currentUser && currentUser.subscription_expiry) {
                 const expiry = new Date(currentUser.subscription_expiry);
                 if (expiry < new Date()) {
@@ -2279,7 +2246,6 @@
             addLog('🌐 CloudCS Лаунчер загружен');
             addLog('💡 Войдите в аккаунт для управления подпиской');
             addLog('🍪 Сессия сохраняется в cookies');
-            addLog('☁️ Аккаунт синхронизируется между устройствами');
             addLog('🎮 Активируйте бесплатный доступ на 1 час');
 
             connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
@@ -2288,11 +2254,10 @@
             console.log('🚀 CloudCS готов к работе!');
             console.log('📌 Пользователи хранятся в localStorage');
             console.log('🍪 Сессия хранится в cookies (30 дней)');
-            console.log('☁️ Данные синхронизируются между устройствами');
-            console.log('📱 Для синхронизации используйте аккаунт в браузере');
+            console.log('🔑 VK ID для быстрой регистрации');
         }
 
         init();
     </script>
 </body>
-                        </html>
+    </html>
