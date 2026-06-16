@@ -6,6 +6,7 @@
     <title>CloudCS - Облачный гейминг</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ВСЕ СТИЛИ ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ */
         * {
             margin: 0;
             padding: 0;
@@ -940,6 +941,48 @@
             display: block;
         }
 
+        /* Cookie уведомление */
+        .cookie-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 20px 30px;
+            z-index: 9999;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: modalIn 0.5s ease;
+        }
+
+        .cookie-notice p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .cookie-notice .cookie-btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            color: #fff;
+        }
+
+        .cookie-notice .cookie-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
@@ -1012,6 +1055,11 @@
             .user-menu .user-name {
                 display: none;
             }
+
+            .cookie-notice {
+                padding: 15px 20px;
+                bottom: 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1046,14 +1094,12 @@
             <a href="#pricing">Тарифы</a>
             <a href="#launcher">Играть</a>
             
-            <!-- Меню пользователя -->
             <div class="user-menu" id="userMenu" onclick="openProfileModal()" style="display: none;">
                 <div class="user-avatar" id="userAvatar">U</div>
                 <span class="user-name" id="userName">Пользователь</span>
                 <span class="user-badge" id="userBadge">Бесплатно</span>
             </div>
             
-            <!-- Кнопка входа -->
             <button class="btn-nav" id="loginBtn" onclick="openAuthModal('login')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
                 <i class="fas fa-user"></i> Войти
             </button>
@@ -1097,7 +1143,6 @@
         </div>
 
         <div class="pricing-grid">
-            <!-- Бесплатный -->
             <div class="pricing-card">
                 <div class="card-icon">
                     <i class="fas fa-gift"></i>
@@ -1124,7 +1169,6 @@
                 </div>
             </div>
 
-            <!-- Стандарт -->
             <div class="pricing-card popular">
                 <div class="card-badge">🔥 Популярный</div>
                 <div class="card-icon">
@@ -1148,7 +1192,6 @@
                 </button>
             </div>
 
-            <!-- Премиум -->
             <div class="pricing-card">
                 <div class="card-icon">
                     <i class="fas fa-crown"></i>
@@ -1320,9 +1363,46 @@
         </div>
     </div>
 
+    <!-- COOKIE УВЕДОМЛЕНИЕ -->
+    <div class="cookie-notice" id="cookieNotice">
+        <p>
+            🍪 Мы используем cookies для сохранения вашего аккаунта и настроек.
+            Продолжая использовать сайт, вы соглашаетесь с этим.
+        </p>
+        <button class="cookie-btn" onclick="acceptCookies()">Принять</button>
+    </div>
+
     <script>
         // ============================================================
-        //  ХРАНИЛИЩЕ ДАННЫХ (localStorage)
+        //  РАБОТА С COOKIES
+        // ============================================================
+        const CookieManager = {
+            set(name, value, days = 30) {
+                const expires = new Date();
+                expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+                document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))};expires=${expires.toUTCString()};path=/;SameSite=Lax`;
+            },
+            get(name) {
+                const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                if (match) {
+                    try {
+                        return JSON.parse(decodeURIComponent(match[2]));
+                    } catch {
+                        return null;
+                    }
+                }
+                return null;
+            },
+            delete(name) {
+                document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+            },
+            exists(name) {
+                return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
+            }
+        };
+
+        // ============================================================
+        //  ХРАНИЛИЩЕ ДАННЫХ (localStorage для пользователей + cookies для сессии)
         // ============================================================
         const DB = {
             getUsers() {
@@ -1332,13 +1412,13 @@
                 localStorage.setItem('cloudcs_users', JSON.stringify(users));
             },
             getCurrentUser() {
-                return JSON.parse(localStorage.getItem('cloudcs_current_user') || 'null');
+                return CookieManager.get('cloudcs_session');
             },
             saveCurrentUser(user) {
-                localStorage.setItem('cloudcs_current_user', JSON.stringify(user));
+                CookieManager.set('cloudcs_session', user, 30);
             },
             clearCurrentUser() {
-                localStorage.removeItem('cloudcs_current_user');
+                CookieManager.delete('cloudcs_session');
             },
             getUserByEmail(email) {
                 return this.getUsers().find(u => u.email === email);
@@ -1358,6 +1438,21 @@
                 return null;
             }
         };
+
+        // ============================================================
+        //  COOKIE СОГЛАСИЕ
+        // ============================================================
+        function acceptCookies() {
+            CookieManager.set('cookies_accepted', true, 365);
+            document.getElementById('cookieNotice').style.display = 'none';
+            addLog('🍪 Cookies приняты');
+        }
+
+        function checkCookies() {
+            if (CookieManager.get('cookies_accepted')) {
+                document.getElementById('cookieNotice').style.display = 'none';
+            }
+        }
 
         // ============================================================
         //  ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
@@ -2004,9 +2099,14 @@
         //  ИНИЦИАЛИЗАЦИЯ
         // ============================================================
         function init() {
+            // Проверяем согласие на cookies
+            checkCookies();
+            
+            // Загружаем пользователя из cookies
             currentUser = DB.getCurrentUser();
             updateUI();
 
+            // Проверяем подписку
             if (currentUser && currentUser.subscription_expiry) {
                 const expiry = new Date(currentUser.subscription_expiry);
                 if (expiry < new Date()) {
@@ -2024,6 +2124,7 @@
 
             addLog('🌐 CloudCS Лаунчер загружен');
             addLog('💡 Войдите в аккаунт для управления подпиской');
+            addLog('🍪 Сессия сохраняется в cookies');
             addLog('🎮 Активируйте бесплатный доступ на 1 час');
 
             connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
@@ -2031,6 +2132,7 @@
 
             console.log('🚀 CloudCS готов к работе!');
             console.log('📌 Пользователи хранятся в localStorage');
+            console.log('🍪 Сессия хранится в cookies (30 дней)');
         }
 
         init();
