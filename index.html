@@ -417,7 +417,7 @@
             color: #fff;
         }
 
-        .card-btn.primary:hover {
+        .card-btn.primary:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
         }
@@ -444,7 +444,7 @@
             color: #fff;
         }
 
-        .card-btn.free-btn:hover {
+        .card-btn.free-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(81, 207, 102, 0.3);
         }
@@ -698,6 +698,12 @@
             box-shadow: 0 0 20px rgba(81, 207, 102, 0.3);
         }
 
+        .status-dot.error {
+            background: #ff6b6b;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+            animation: pulse 1s infinite;
+        }
+
         .log-area {
             margin-top: 15px;
             max-height: 120px;
@@ -722,6 +728,18 @@
             border-radius: 2px;
         }
 
+        .log-area .error-log {
+            color: #ff6b6b;
+        }
+
+        .log-area .success-log {
+            color: #51cf66;
+        }
+
+        .log-area .info-log {
+            color: #ffa94d;
+        }
+
         .connection-info {
             margin-top: 15px;
             padding: 15px;
@@ -734,6 +752,10 @@
 
         .connection-info strong {
             color: #ffa94d;
+        }
+
+        .connection-info .error-info {
+            color: #ff6b6b;
         }
 
         .footer {
@@ -1024,6 +1046,148 @@
             box-shadow: 0 8px 25px rgba(238, 90, 36, 0.4);
         }
 
+        /* ЭКРАН ПК (ОВЕРЛЕЙ) */
+        .pc-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1500;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 30px;
+            animation: modalIn 0.3s ease;
+        }
+
+        .pc-overlay.active {
+            display: flex;
+        }
+
+        .pc-overlay .pc-screen-content {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        .pc-overlay .pc-screen-content .pc-icon {
+            font-size: 80px;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .pc-overlay .pc-screen-content .pc-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .pc-overlay .pc-screen-content .pc-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .pc-overlay .pc-screen-content .pc-details {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: left;
+        }
+
+        .pc-overlay .pc-screen-content .pc-details div {
+            padding: 4px 0;
+        }
+
+        .pc-overlay .pc-screen-content .pc-details span {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .pc-overlay .pc-screen-content .pc-details .error-detail {
+            color: #ff6b6b;
+        }
+
+        .pc-overlay .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(255, 255, 255, 0.05);
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .pc-overlay .loading-spinner.error {
+            border-top-color: #ff6b6b;
+        }
+
+        .pc-overlay .loading-spinner.success {
+            border-top-color: #51cf66;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .pc-overlay .pc-status {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .pc-overlay .pc-status.error {
+            color: #ff6b6b;
+        }
+
+        .pc-overlay .pc-status.success {
+            color: #51cf66;
+        }
+
+        .pc-overlay .pc-status-text {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 5px;
+        }
+
+        .pc-overlay .pc-close-btn {
+            margin-top: 20px;
+            padding: 12px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .pc-overlay .pc-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .pc-overlay .pc-close-btn.primary {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            border: none;
+        }
+
+        .pc-overlay .pc-close-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(238, 90, 36, 0.4);
+        }
+
         @media (max-width: 768px) {
             .navbar {
                 padding: 15px 20px;
@@ -1100,6 +1264,14 @@
             .cookie-notice {
                 padding: 15px 20px;
                 bottom: 10px;
+            }
+
+            .pc-overlay .pc-screen-content .pc-title {
+                font-size: 22px;
+            }
+
+            .pc-overlay .pc-screen-content .pc-icon {
+                font-size: 50px;
             }
         }
 
@@ -1413,6 +1585,24 @@
         </div>
     </div>
 
+    <!-- ЭКРАН ПК (ОВЕРЛЕЙ) -->
+    <div class="pc-overlay" id="pcOverlay">
+        <div class="pc-screen-content">
+            <span class="pc-icon" id="pcIcon"><i class="fas fa-desktop"></i></span>
+            <div class="loading-spinner" id="pcSpinner"></div>
+            <div class="pc-status" id="pcStatus">Подключение...</div>
+            <div class="pc-status-text" id="pcStatusText">Пожалуйста, подождите</div>
+            <div class="pc-details" id="pcDetails">
+                <div>Тип подключения: <span id="pcConnectionType">Локальное</span></div>
+                <div>Адрес: <span id="pcAddress">127.0.0.1:27015</span></div>
+                <div id="pcErrorDetail" style="display: none; color: #ff6b6b; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px;">
+                    ⚠️ <span id="pcErrorMessage"></span>
+                </div>
+            </div>
+            <button class="pc-close-btn" id="pcCloseBtn" onclick="closePcOverlay()" style="display: none;">Закрыть</button>
+        </div>
+    </div>
+
     <!-- COOKIE УВЕДОМЛЕНИЕ -->
     <div class="cookie-notice" id="cookieNotice">
         <p>
@@ -1424,7 +1614,7 @@
 
     <script>
         // ============================================================
-        //  РАБОТА С COOKIES
+        //  COOKIES
         // ============================================================
         const CookieManager = {
             set(name, value, days = 30) {
@@ -1445,15 +1635,9 @@
             },
             delete(name) {
                 document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
-            },
-            exists(name) {
-                return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
             }
         };
 
-        // ============================================================
-        //  ХРАНИЛИЩЕ ДАННЫХ
-        // ============================================================
         const DB = {
             getUsers() {
                 return JSON.parse(localStorage.getItem('cloudcs_users') || '[]');
@@ -1473,6 +1657,9 @@
             getUserByEmail(email) {
                 return this.getUsers().find(u => u.email === email);
             },
+            getUserByVKId(vkId) {
+                return this.getUsers().find(u => u.vk_id === vkId);
+            },
             updateUser(email, updates) {
                 const users = this.getUsers();
                 const index = users.findIndex(u => u.email === email);
@@ -1486,10 +1673,6 @@
                     return users[index];
                 }
                 return null;
-            },
-            // VK ID пользователи
-            getUserByVKId(vkId) {
-                return this.getUsers().find(u => u.vk_id === vkId);
             }
         };
 
@@ -1499,7 +1682,7 @@
         function acceptCookies() {
             CookieManager.set('cookies_accepted', true, 365);
             document.getElementById('cookieNotice').style.display = 'none';
-            addLog('🍪 Cookies приняты');
+            addLog('🍪 Cookies приняты', 'info');
         }
 
         function checkCookies() {
@@ -1509,20 +1692,16 @@
         }
 
         // ============================================================
-        //  VK ID АВТОРИЗАЦИЯ
+        //  VK ID
         // ============================================================
         function loginWithVK() {
-            // Создаём демо-данные для VK ID
-            // В реальном проекте здесь был бы OAuth-запрос к VK API
             const vkId = 'vk_' + Date.now().toString(36);
-            const vkEmail = 'vk_user_' + Date.now().toString(36).substring(0, 8) + '@vk.com';
+            const vkEmail = 'vk_user_' + Date.now().toString(36).substring(0, 6) + '@vk.com';
             const vkName = 'VK User';
 
-            // Проверяем, есть ли уже пользователь с таким VK ID
             let user = DB.getUserByVKId(vkId);
             
             if (!user) {
-                // Создаём нового пользователя
                 user = {
                     email: vkEmail,
                     username: vkName,
@@ -1533,83 +1712,26 @@
                     games_played: 0,
                     created_at: new Date().toISOString()
                 };
-
                 const users = DB.getUsers();
                 users.push(user);
                 DB.saveUsers(users);
-                addLog(`✅ Создан аккаунт через VK ID: ${vkName}`);
+                addLog('✅ Создан аккаунт через VK ID', 'success');
             }
 
-            // Вход
             DB.saveCurrentUser(user);
             currentUser = user;
             updateUI();
             closeAuthModal();
-            addLog(`✅ Добро пожаловать, ${user.username || user.email}!`);
+            addLog('✅ Вход через VK ID выполнен', 'success');
             showNotification('Вход через VK ID выполнен!', 'success');
         }
 
         // ============================================================
-        //  ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-        // ============================================================
-        let API_URL = 'http://127.0.0.1:5000';
-        let connectionType = 'local';
-        let freeTimeRemaining = 3600;
-        let freeTimerInterval = null;
-        let isFreeActive = false;
-        let pollingInterval = null;
-        let isAuthMode = 'login';
-        let currentUser = null;
-
-        // ============================================================
-        //  DOM ЭЛЕМЕНТЫ
-        // ============================================================
-        const logArea = document.getElementById('logArea');
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
-        const launchBtn = document.getElementById('launchBtn');
-        const serverInput = document.getElementById('serverInput');
-        const ngrokInput = document.getElementById('ngrokInput');
-        const localBtn = document.getElementById('localBtn');
-        const ngrokBtn = document.getElementById('ngrokBtn');
-        const internetBtn = document.getElementById('internetBtn');
-        const connectionTypeDisplay = document.getElementById('connectionTypeDisplay');
-        const connectionUrlDisplay = document.getElementById('connectionUrlDisplay');
-        const timeLeftEl = document.getElementById('timeLeft');
-
-        const authModal = document.getElementById('authModal');
-        const authTitle = document.getElementById('authTitle');
-        const authSubtitle = document.getElementById('authSubtitle');
-        const authEmail = document.getElementById('authEmail');
-        const authPassword = document.getElementById('authPassword');
-        const authActionBtn = document.getElementById('authActionBtn');
-        const authError = document.getElementById('authError');
-        const authSwitchText = document.getElementById('authSwitchText');
-        const loginBtn = document.getElementById('loginBtn');
-        const userMenu = document.getElementById('userMenu');
-        const userName = document.getElementById('userName');
-        const userAvatar = document.getElementById('userAvatar');
-        const userBadge = document.getElementById('userBadge');
-
-        const profileModal = document.getElementById('profileModal');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const profileName = document.getElementById('profileName');
-        const profileEmail = document.getElementById('profileEmail');
-        const profileStatus = document.getElementById('profileStatus');
-        const profileExpiry = document.getElementById('profileExpiry');
-        const profileFreeTime = document.getElementById('profileFreeTime');
-        const profileGames = document.getElementById('profileGames');
-        const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
-
-        const freeActivateBtn = document.getElementById('freeActivateBtn');
-        const standardBtn = document.getElementById('standardBtn');
-        const premiumBtn = document.getElementById('premiumBtn');
-
-        const devModalOverlay = document.getElementById('devModalOverlay');
-
-        // ============================================================
         //  АВТОРИЗАЦИЯ
         // ============================================================
+        let currentUser = null;
+        let isAuthMode = 'login';
+
         function openAuthModal(mode = 'login') {
             isAuthMode = mode;
             authModal.classList.add('active');
@@ -1678,7 +1800,7 @@
                 currentUser = newUser;
                 updateUI();
                 closeAuthModal();
-                addLog(`✅ Добро пожаловать, ${email}!`);
+                addLog(`✅ Добро пожаловать, ${email}!`, 'success');
                 showNotification('Регистрация успешна!', 'success');
             } else {
                 const user = DB.getUserByEmail(email);
@@ -1692,7 +1814,7 @@
                 currentUser = user;
                 updateUI();
                 closeAuthModal();
-                addLog(`✅ Добро пожаловать, ${email}!`);
+                addLog(`✅ Добро пожаловать, ${email}!`, 'success');
                 showNotification('Вход выполнен!', 'success');
             }
         }
@@ -1702,7 +1824,7 @@
             currentUser = null;
             updateUI();
             closeProfileModal();
-            addLog('👋 Вы вышли из аккаунта');
+            addLog('👋 Вы вышли из аккаунта', 'info');
             showNotification('Вы вышли из аккаунта', 'info');
         }
 
@@ -1747,10 +1869,9 @@
         }
 
         // ============================================================
-        //  УПРАВЛЕНИЕ ПОДПИСКОЙ (ИСПРАВЛЕНО)
+        //  ТАРИФЫ
         // ============================================================
         function subscribe(plan) {
-            // Проверка авторизации
             if (!currentUser) {
                 openAuthModal('login');
                 showNotification('Сначала войдите в аккаунт!', 'error');
@@ -1763,27 +1884,18 @@
             };
 
             const planData = plans[plan];
-            if (!planData) {
-                showNotification('Тариф не найден!', 'error');
-                return;
-            }
+            if (!planData) return;
 
-            // Проверяем, не активна ли уже эта подписка
             if (currentUser.subscription === plan) {
                 showNotification(`У вас уже активна подписка "${planData.name}"`, 'info');
                 return;
             }
 
-            // Подтверждение
-            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) {
-                return;
-            }
+            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) return;
 
-            // Вычисляем дату окончания
             const expiry = new Date();
             expiry.setDate(expiry.getDate() + planData.days);
 
-            // Обновляем пользователя
             const updated = DB.updateUser(currentUser.email, {
                 subscription: plan,
                 subscription_expiry: expiry.toISOString()
@@ -1792,11 +1904,9 @@
             if (updated) {
                 currentUser = updated;
                 updateUI();
-                addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`);
+                addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`, 'success');
                 showNotification(`Тариф "${planData.name}" активирован!`, 'success');
                 updateTariffButtons();
-            } else {
-                showNotification('Ошибка при активации тарифа!', 'error');
             }
         }
 
@@ -1806,9 +1916,7 @@
                 return;
             }
 
-            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) {
-                return;
-            }
+            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) return;
 
             const updated = DB.updateUser(currentUser.email, {
                 subscription: 'free',
@@ -1820,19 +1928,15 @@
                 updateUI();
                 updateTariffButtons();
                 closeProfileModal();
-                addLog('❌ Подписка отключена');
+                addLog('❌ Подписка отключена', 'info');
                 showNotification('Подписка отключена', 'info');
-            } else {
-                showNotification('Ошибка при отключении подписки!', 'error');
             }
         }
 
         function updateTariffButtons() {
-            // Сбрасываем все кнопки
             standardBtn.className = 'card-btn primary';
             standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
             standardBtn.disabled = false;
-            
             premiumBtn.className = 'card-btn primary';
             premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
             premiumBtn.disabled = false;
@@ -1851,44 +1955,12 @@
         }
 
         // ============================================================
-        //  ОБНОВЛЕНИЕ UI
-        // ============================================================
-        function updateUI() {
-            const user = DB.getCurrentUser();
-            currentUser = user;
-
-            if (user) {
-                loginBtn.style.display = 'none';
-                userMenu.style.display = 'flex';
-                const displayName = user.username || user.email.split('@')[0];
-                userName.textContent = displayName;
-                userAvatar.textContent = displayName.charAt(0).toUpperCase();
-                
-                const statusMap = {
-                    'free': { text: '🆓 Бесплатно', class: 'free' },
-                    'standard': { text: '⭐ Стандарт', class: '' },
-                    'premium': { text: '👑 Премиум', class: '' }
-                };
-                const status = statusMap[user.subscription] || statusMap['free'];
-                userBadge.textContent = status.text;
-                userBadge.className = 'user-badge' + (status.class ? ' ' + status.class : '');
-                
-                updateTariffButtons();
-            } else {
-                loginBtn.style.display = 'block';
-                userMenu.style.display = 'none';
-                standardBtn.className = 'card-btn primary';
-                standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
-                standardBtn.disabled = false;
-                premiumBtn.className = 'card-btn primary';
-                premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
-                premiumBtn.disabled = false;
-            }
-        }
-
-        // ============================================================
         //  БЕСПЛАТНЫЙ ТАЙМЕР
         // ============================================================
+        let freeTimeRemaining = 3600;
+        let freeTimerInterval = null;
+        let isFreeActive = false;
+
         function startFreeTimer() {
             if (freeTimerInterval) return;
 
@@ -1904,7 +1976,7 @@
                     clearInterval(freeTimerInterval);
                     freeTimerInterval = null;
                     isFreeActive = false;
-                    addLog('⏰ Бесплатное время закончилось!');
+                    addLog('⏰ Бесплатное время закончилось!', 'error');
                     freeActivateBtn.disabled = true;
                     freeActivateBtn.textContent = '⏳ Бесплатный лимит исчерпан';
                     timeLeftEl.textContent = '0:00:00';
@@ -1932,24 +2004,27 @@
             }
 
             if (isFreeActive) {
-                addLog('ℹ️ Бесплатный доступ уже активирован');
+                addLog('ℹ️ Бесплатный доступ уже активирован', 'info');
                 return;
             }
 
             if (freeTimeRemaining <= 0) {
-                addLog('❌ Бесплатный лимит на сегодня исчерпан');
+                addLog('❌ Бесплатный лимит на сегодня исчерпан', 'error');
                 showNotification('Бесплатный лимит исчерпан!', 'error');
                 return;
             }
 
             startFreeTimer();
-            addLog('🎁 Активирован бесплатный доступ на 1 час!');
+            addLog('🎁 Активирован бесплатный доступ на 1 час!', 'success');
             showNotification('Бесплатный доступ активирован!', 'success');
         }
 
         // ============================================================
         //  ПОДКЛЮЧЕНИЕ
         // ============================================================
+        let API_URL = 'http://127.0.0.1:5000';
+        let connectionType = 'local';
+
         function switchConnection(type) {
             if (type === 'internet') {
                 showDevModal();
@@ -1968,7 +2043,7 @@
                 API_URL = 'http://127.0.0.1:5000';
                 connectionTypeDisplay.textContent = 'Локальное';
                 connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
-                addLog('🔗 Переключено на локальное подключение');
+                addLog('🔗 Переключено на локальное подключение', 'info');
             } else if (type === 'ngrok') {
                 ngrokBtn.classList.add('active');
                 localBtn.classList.remove('active');
@@ -1980,7 +2055,7 @@
                 API_URL = ngrokUrl;
                 connectionTypeDisplay.textContent = 'ngrok';
                 connectionUrlDisplay.textContent = ` (${ngrokUrl})`;
-                addLog(`🌐 Переключено на ngrok: ${ngrokUrl}`);
+                addLog(`🌐 Переключено на ngrok: ${ngrokUrl}`, 'info');
             }
         }
 
@@ -1995,9 +2070,12 @@
         // ============================================================
         //  ЛАУНЧЕР
         // ============================================================
-        function addLog(message) {
+        let pollingInterval = null;
+
+        function addLog(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString();
-            logArea.innerHTML += `[${timestamp}] ${message}\n`;
+            const className = type === 'error' ? 'error-log' : type === 'success' ? 'success-log' : 'info-log';
+            logArea.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>\n`;
             logArea.scrollTop = logArea.scrollHeight;
         }
 
@@ -2031,11 +2109,82 @@
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 return await response.json();
             } catch (error) {
-                addLog(`❌ Ошибка API: ${error.message}`);
                 return null;
             }
         }
 
+        // ============================================================
+        //  ЭКРАН ПК (ОВЕРЛЕЙ)
+        // ============================================================
+        function showPcOverlay(status, message, details = null) {
+            const overlay = document.getElementById('pcOverlay');
+            const spinner = document.getElementById('pcSpinner');
+            const statusEl = document.getElementById('pcStatus');
+            const statusTextEl = document.getElementById('pcStatusText');
+            const closeBtn = document.getElementById('pcCloseBtn');
+            const icon = document.getElementById('pcIcon');
+            const connType = document.getElementById('pcConnectionType');
+            const address = document.getElementById('pcAddress');
+            const errorDetail = document.getElementById('pcErrorDetail');
+            const errorMessage = document.getElementById('pcErrorMessage');
+
+            overlay.classList.add('active');
+            
+            // Обновляем детали
+            if (details) {
+                connType.textContent = details.type || connectionType;
+                address.textContent = details.address || '—';
+            }
+
+            if (status === 'loading') {
+                spinner.className = 'loading-spinner';
+                spinner.style.display = 'block';
+                statusEl.className = 'pc-status';
+                statusEl.textContent = '🔄 Подключение...';
+                statusTextEl.textContent = message || 'Пожалуйста, подождите';
+                closeBtn.style.display = 'none';
+                icon.innerHTML = '<i class="fas fa-desktop" style="color: #ffa94d;"></i>';
+                errorDetail.style.display = 'none';
+            } else if (status === 'success') {
+                spinner.className = 'loading-spinner success';
+                spinner.style.display = 'block';
+                statusEl.className = 'pc-status success';
+                statusEl.textContent = '✅ Подключено!';
+                statusTextEl.textContent = message || 'Игра запущена на удалённом ПК';
+                closeBtn.style.display = 'block';
+                closeBtn.className = 'pc-close-btn primary';
+                closeBtn.textContent = '🎮 Перейти к игре';
+                icon.innerHTML = '<i class="fas fa-check-circle" style="color: #51cf66;"></i>';
+                errorDetail.style.display = 'none';
+            } else if (status === 'error') {
+                spinner.className = 'loading-spinner error';
+                spinner.style.display = 'block';
+                statusEl.className = 'pc-status error';
+                statusEl.textContent = '❌ Ошибка подключения';
+                statusTextEl.textContent = message || 'Не удалось подключиться к серверу';
+                closeBtn.style.display = 'block';
+                closeBtn.className = 'pc-close-btn';
+                closeBtn.textContent = '✖ Закрыть';
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #ff6b6b;"></i>';
+                
+                // Показываем детали ошибки
+                if (details && details.error) {
+                    errorDetail.style.display = 'block';
+                    errorMessage.textContent = details.error;
+                } else {
+                    errorDetail.style.display = 'block';
+                    errorMessage.textContent = 'Проверьте: 1) Запущен ли launcher.bat 2) Правильный ли адрес 3) Доступен ли порт 5000';
+                }
+            }
+        }
+
+        function closePcOverlay() {
+            document.getElementById('pcOverlay').classList.remove('active');
+        }
+
+        // ============================================================
+        //  ЗАПУСК И ОСТАНОВКА
+        // ============================================================
         async function launchGame() {
             if (!currentUser) {
                 openAuthModal('login');
@@ -2049,61 +2198,90 @@
             }
 
             if (currentUser.subscription === 'free' && !isFreeActive && freeTimeRemaining <= 0) {
-                addLog('❌ Бесплатное время закончилось. Выберите платный тариф.');
+                addLog('❌ Бесплатное время закончилось. Выберите платный тариф.', 'error');
                 showNotification('Бесплатное время закончилось!', 'error');
                 return;
             }
 
             let server = '';
+            let details = { type: connectionType, address: '' };
+            
             if (connectionType === 'local') {
                 server = serverInput.value.trim() || '127.0.0.1:27015';
+                details.address = server;
             } else {
                 const ngrokUrl = ngrokInput.value.trim();
                 if (!ngrokUrl) {
-                    addLog('❌ Введите ngrok URL');
+                    addLog('❌ Введите ngrok URL', 'error');
                     showNotification('Введите ngrok URL!', 'error');
                     return;
                 }
                 server = ngrokUrl;
+                details.address = server;
             }
 
-            addLog(`🔄 Запуск CS на ${connectionType === 'local' ? 'сервере' : 'ngrok'} ${server}...`);
+            // Показываем экран ПК с загрузкой
+            showPcOverlay('loading', 'Подключение к удалённому ПК...', details);
+            addLog(`🔄 Запуск CS на ${connectionType === 'local' ? 'сервере' : 'ngrok'} ${server}...`, 'info');
             launchBtn.disabled = true;
             launchBtn.textContent = '⏳ Запуск...';
 
-            const result = await apiRequest('/launch', 'POST', { 
-                server: server,
-                connection_type: connectionType 
-            });
+            try {
+                const result = await apiRequest('/launch', 'POST', { 
+                    server: server,
+                    connection_type: connectionType 
+                });
 
-            if (result && result.status === 'ok') {
-                addLog(`✅ CS запущен! PID: ${result.pid || '?'}`);
-                updateStatus(true, `Запущен (${connectionType})`);
-                startPolling();
-                
-                if (currentUser) {
-                    const updated = DB.updateUser(currentUser.email, {
-                        games_played: (currentUser.games_played || 0) + 1
+                if (result && result.status === 'ok') {
+                    addLog(`✅ CS запущен! PID: ${result.pid || '?'}`, 'success');
+                    updateStatus(true, `Запущен (${connectionType})`);
+                    startPolling();
+                    
+                    showPcOverlay('success', 'CS запущен на удалённом ПК', details);
+                    
+                    if (currentUser) {
+                        const updated = DB.updateUser(currentUser.email, {
+                            games_played: (currentUser.games_played || 0) + 1
+                        });
+                        if (updated) currentUser = updated;
+                    }
+                } else {
+                    const errorMsg = result?.error || 'Неизвестная ошибка';
+                    addLog(`❌ Ошибка запуска: ${errorMsg}`, 'error');
+                    
+                    let errorDetails = 'Проверьте: 1) Запущен ли launcher.bat 2) Правильный ли адрес 3) Доступен ли порт 5000';
+                    showPcOverlay('error', `Ошибка: ${errorMsg}`, { 
+                        ...details, 
+                        error: errorDetails 
                     });
-                    if (updated) currentUser = updated;
+                    
+                    launchBtn.disabled = false;
+                    launchBtn.textContent = '🚀 Запустить CS';
+                    updateStatus(false);
                 }
-            } else {
-                addLog(`❌ Ошибка запуска: ${result?.error || 'Неизвестная ошибка'}`);
+            } catch (error) {
+                addLog(`❌ Ошибка подключения: ${error.message}`, 'error');
+                showPcOverlay('error', 'Сервер недоступен', { 
+                    ...details, 
+                    error: 'Проверьте: 1) Запущен ли launcher.bat 2) Правильный ли адрес 3) Доступен ли порт 5000' 
+                });
                 launchBtn.disabled = false;
                 launchBtn.textContent = '🚀 Запустить CS';
+                updateStatus(false);
             }
         }
 
         async function stopGame() {
-            addLog('⏹ Остановка CS...');
+            addLog('⏹ Остановка CS...', 'info');
             const result = await apiRequest('/stop', 'POST');
 
             if (result && result.status === 'ok') {
-                addLog('✅ CS остановлен');
+                addLog('✅ CS остановлен', 'success');
                 updateStatus(false);
                 stopPolling();
+                closePcOverlay();
             } else {
-                addLog(`❌ Ошибка остановки: ${result?.error || 'Неизвестная ошибка'}`);
+                addLog(`❌ Ошибка остановки: ${result?.error || 'Неизвестная ошибка'}`, 'error');
             }
             launchBtn.disabled = false;
             launchBtn.textContent = '🚀 Запустить CS';
@@ -2134,11 +2312,11 @@
         }
 
         // ============================================================
-        //  МОДАЛЬНЫЕ ОКНА
+        //  МОДАЛЬНЫЕ
         // ============================================================
         function showDevModal() {
             devModalOverlay.classList.add('active');
-            addLog('ℹ️ Функция "Интернет" в разработке');
+            addLog('ℹ️ Функция "Интернет" в разработке', 'info');
         }
 
         function closeDevModal() {
@@ -2180,7 +2358,43 @@
         }
 
         // ============================================================
-        //  ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО КЛИКУ ВНЕ
+        //  UI
+        // ============================================================
+        function updateUI() {
+            const user = DB.getCurrentUser();
+            currentUser = user;
+
+            if (user) {
+                loginBtn.style.display = 'none';
+                userMenu.style.display = 'flex';
+                const displayName = user.username || user.email.split('@')[0];
+                userName.textContent = displayName;
+                userAvatar.textContent = displayName.charAt(0).toUpperCase();
+                
+                const statusMap = {
+                    'free': { text: '🆓 Бесплатно', class: 'free' },
+                    'standard': { text: '⭐ Стандарт', class: '' },
+                    'premium': { text: '👑 Премиум', class: '' }
+                };
+                const status = statusMap[user.subscription] || statusMap['free'];
+                userBadge.textContent = status.text;
+                userBadge.className = 'user-badge' + (status.class ? ' ' + status.class : '');
+                
+                updateTariffButtons();
+            } else {
+                loginBtn.style.display = 'block';
+                userMenu.style.display = 'none';
+                standardBtn.className = 'card-btn primary';
+                standardBtn.innerHTML = '<i class="fas fa-rocket"></i> Подключить';
+                standardBtn.disabled = false;
+                premiumBtn.className = 'card-btn primary';
+                premiumBtn.innerHTML = '<i class="fas fa-crown"></i> Подключить';
+                premiumBtn.disabled = false;
+            }
+        }
+
+        // ============================================================
+        //  ЗАКРЫТИЕ МОДАЛЬНЫХ
         // ============================================================
         authModal.addEventListener('click', (e) => {
             if (e.target === authModal) closeAuthModal();
@@ -2238,15 +2452,15 @@
                     if (updated) {
                         currentUser = updated;
                         updateUI();
-                        addLog('⏰ Подписка истекла, переключено на бесплатный тариф');
+                        addLog('⏰ Подписка истекла, переключено на бесплатный тариф', 'info');
                     }
                 }
             }
 
-            addLog('🌐 CloudCS Лаунчер загружен');
-            addLog('💡 Войдите в аккаунт для управления подпиской');
-            addLog('🍪 Сессия сохраняется в cookies');
-            addLog('🎮 Активируйте бесплатный доступ на 1 час');
+            addLog('🌐 CloudCS Лаунчер загружен', 'info');
+            addLog('💡 Войдите в аккаунт для управления подпиской', 'info');
+            addLog('🍪 Сессия сохраняется в cookies', 'info');
+            addLog('🎮 Активируйте бесплатный доступ на 1 час', 'info');
 
             connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
             getStatus();
@@ -2260,4 +2474,4 @@
         init();
     </script>
 </body>
-    </html>
+</html>
