@@ -798,7 +798,7 @@
             background: #1a1a2e;
             border-radius: 20px;
             padding: 40px;
-            max-width: 450px;
+            max-width: 500px;
             width: 90%;
             border: 1px solid rgba(255, 255, 255, 0.08);
             animation: modalIn 0.3s ease;
@@ -872,6 +872,16 @@
             background: rgba(255, 107, 107, 0.25);
         }
 
+        .modal .modal-btn.success {
+            background: rgba(81, 207, 102, 0.15);
+            color: #51cf66;
+            border: 1px solid rgba(81, 207, 102, 0.2);
+        }
+
+        .modal .modal-btn.success:hover {
+            background: rgba(81, 207, 102, 0.25);
+        }
+
         .modal .modal-btn.vk {
             background: #2787f5;
             color: #fff;
@@ -895,7 +905,8 @@
             margin-bottom: 5px;
         }
 
-        .modal .form-group input {
+        .modal .form-group input,
+        .modal .form-group select {
             width: 100%;
             padding: 12px 16px;
             border-radius: 10px;
@@ -906,13 +917,19 @@
             transition: all 0.3s ease;
         }
 
-        .modal .form-group input:focus {
+        .modal .form-group input:focus,
+        .modal .form-group select:focus {
             outline: none;
             border-color: #ff6b6b;
         }
 
         .modal .form-group input::placeholder {
             color: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal .form-group select option {
+            background: #1a1a2e;
+            color: #fff;
         }
 
         .modal .auth-switch {
@@ -1001,6 +1018,18 @@
         }
 
         .modal .error-message.visible {
+            display: block;
+        }
+
+        .modal .success-message {
+            color: #51cf66;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .modal .success-message.visible {
             display: block;
         }
 
@@ -1273,6 +1302,11 @@
             .pc-overlay .pc-screen-content .pc-icon {
                 font-size: 50px;
             }
+
+            .modal {
+                padding: 25px;
+                max-width: 95%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1287,14 +1321,11 @@
             .launcher-box {
                 padding: 20px;
             }
-
-            .modal {
-                padding: 25px;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- АНИМИРОВАННЫЙ ФОН -->
     <div class="bg-animation"></div>
 
     <!-- НАВБАР -->
@@ -1402,7 +1433,7 @@
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
                     <li><i class="fas fa-check"></i> Поддержка 24/7</li>
                 </ul>
-                <button class="card-btn primary" id="standardBtn" onclick="subscribe('standard')">
+                <button class="card-btn primary" id="standardBtn" onclick="openSubscribeModal('standard')">
                     <i class="fas fa-rocket"></i> Подключить
                 </button>
             </div>
@@ -1425,7 +1456,7 @@
                     <li><i class="fas fa-check"></i> Максимальное качество графики</li>
                     <li><i class="fas fa-check"></i> <span class="highlight-feature">Персональный</span> менеджер</li>
                 </ul>
-                <button class="card-btn primary" id="premiumBtn" onclick="subscribe('premium')">
+                <button class="card-btn primary" id="premiumBtn" onclick="openSubscribeModal('premium')">
                     <i class="fas fa-crown"></i> Подключить
                 </button>
             </div>
@@ -1534,6 +1565,16 @@
                 <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ffa94d); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 32px; font-weight: 700; color: #fff;" id="profileAvatar">U</div>
                 <div style="font-size: 20px; font-weight: 700; margin-top: 10px;" id="profileName">Пользователь</div>
                 <div style="color: rgba(255,255,255,0.4); font-size: 14px;" id="profileEmail">user@mail.com</div>
+                <div style="color: rgba(255,255,255,0.2); font-size: 12px; margin-top: 4px;" id="profileId">ID: —</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button class="modal-btn secondary" onclick="openEditNameModal()" style="flex: 1; margin-bottom: 0; padding: 10px; font-size: 13px;">
+                    <i class="fas fa-user-edit"></i> Изменить имя
+                </button>
+                <button class="modal-btn secondary" onclick="openEditEmailModal()" style="flex: 1; margin-bottom: 0; padding: 10px; font-size: 13px;">
+                    <i class="fas fa-envelope"></i> Изменить email
+                </button>
             </div>
             
             <div class="subscription-info">
@@ -1567,6 +1608,89 @@
         </div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО: ИЗМЕНЕНИЕ ИМЕНИ -->
+    <div class="modal-overlay" id="editNameModal">
+        <div class="modal">
+            <h3>✏️ Изменить имя</h3>
+            <p>Введите новое имя пользователя</p>
+            
+            <div class="form-group">
+                <label>Новое имя</label>
+                <input type="text" id="editNameInput" placeholder="Введите новое имя">
+            </div>
+            
+            <div class="error-message" id="editNameError">Имя не может быть пустым</div>
+            <div class="success-message" id="editNameSuccess">✅ Имя успешно изменено!</div>
+            
+            <button class="modal-btn primary" onclick="saveNameChanges()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+            <button class="modal-btn secondary" onclick="closeEditNameModal()">Отмена</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ИЗМЕНЕНИЕ EMAIL -->
+    <div class="modal-overlay" id="editEmailModal">
+        <div class="modal">
+            <h3>✉️ Изменить email</h3>
+            <p>Введите новый email адрес</p>
+            
+            <div class="form-group">
+                <label>Новый email</label>
+                <input type="email" id="editEmailInput" placeholder="example@mail.com">
+            </div>
+            
+            <div class="form-group">
+                <label>Пароль для подтверждения</label>
+                <input type="password" id="editEmailPassword" placeholder="Введите пароль">
+            </div>
+            
+            <div class="error-message" id="editEmailError">Неверный пароль или email уже используется</div>
+            <div class="success-message" id="editEmailSuccess">✅ Email успешно изменён!</div>
+            
+            <button class="modal-btn primary" onclick="saveEmailChanges()">
+                <i class="fas fa-save"></i> Сохранить
+            </button>
+            <button class="modal-btn secondary" onclick="closeEditEmailModal()">Отмена</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: ПОДПИСКА -->
+    <div class="modal-overlay" id="subscribeModal">
+        <div class="modal">
+            <h3 id="subscribeTitle">📋 Подключение тарифа</h3>
+            <p id="subscribeSubtitle">Выберите период подписки</p>
+            
+            <div id="subscribePlanInfo" style="background: rgba(255, 107, 107, 0.05); border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: center; border: 1px solid rgba(255, 107, 107, 0.1);">
+                <div style="font-size: 18px; font-weight: 700;" id="subscribePlanName">Стандарт</div>
+                <div style="color: rgba(255,255,255,0.4); font-size: 14px;" id="subscribePlanDesc">Неограниченное время</div>
+            </div>
+
+            <div class="form-group">
+                <label>Выберите период</label>
+                <select id="subscribePeriod">
+                    <option value="7">7 дней — 199₽</option>
+                    <option value="30" selected>30 дней — 490₽</option>
+                    <option value="90">90 дней — 1 290₽</option>
+                    <option value="365">365 дней — 4 490₽</option>
+                    <option value="forever">🔥 Навсегда — 9 990₽</option>
+                </select>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 12px 15px; margin-bottom: 20px; font-size: 13px; color: rgba(255, 255, 255, 0.4);">
+                <div>💡 Вы можете отключить подписку в любой момент в профиле</div>
+                <div style="margin-top: 4px;">🔄 При отключении доступ сохраняется до окончания оплаченного периода</div>
+            </div>
+            
+            <div class="error-message" id="subscribeError">Ошибка подключения</div>
+            
+            <button class="modal-btn primary" onclick="confirmSubscribe()">
+                <i class="fas fa-check"></i> Подтвердить
+            </button>
+            <button class="modal-btn secondary" onclick="closeSubscribeModal()">Отмена</button>
+        </div>
+    </div>
+
     <!-- МОДАЛЬНОЕ ОКНО: В РАЗРАБОТКЕ -->
     <div class="modal-overlay" id="devModalOverlay">
         <div class="modal">
@@ -1575,17 +1699,13 @@
                 <i class="fas fa-tools" style="color: #ffa94d; font-size: 48px; display: block; margin: 0 auto 20px;"></i>
                 Функция подключения через интернет находится в активной разработке.
                 <br><br>
-                Скоро вы сможете подключаться к игре без необходимости в локальной сети или ngrok!
-                <br><br>
                 <span style="color: #ffa94d; font-weight: 600;">✨ Ожидайте обновления!</span>
             </p>
-            <button class="modal-btn primary" onclick="closeDevModal()">
-                <i class="fas fa-check"></i> Понятно
-            </button>
+            <button class="modal-btn primary" onclick="closeDevModal()">Понятно</button>
         </div>
     </div>
 
-    <!-- ЭКРАН ПК (ОВЕРЛЕЙ) -->
+    <!-- ЭКРАН ПК -->
     <div class="pc-overlay" id="pcOverlay">
         <div class="pc-screen-content">
             <span class="pc-icon" id="pcIcon"><i class="fas fa-desktop"></i></span>
@@ -1605,10 +1725,7 @@
 
     <!-- COOKIE УВЕДОМЛЕНИЕ -->
     <div class="cookie-notice" id="cookieNotice">
-        <p>
-            🍪 Мы используем cookies для сохранения вашего аккаунта и настроек.
-            Продолжая использовать сайт, вы соглашаетесь с этим.
-        </p>
+        <p>🍪 Мы используем cookies для сохранения вашего аккаунта и настроек</p>
         <button class="cookie-btn" onclick="acceptCookies()">Принять</button>
     </div>
 
@@ -1731,6 +1848,7 @@
         // ============================================================
         let currentUser = null;
         let isAuthMode = 'login';
+        let selectedSubscribePlan = null;
 
         function openAuthModal(mode = 'login') {
             isAuthMode = mode;
@@ -1787,6 +1905,7 @@
 
                 const newUser = {
                     email: email,
+                    username: email.split('@')[0],
                     password: password,
                     subscription: 'free',
                     subscription_expiry: null,
@@ -1828,6 +1947,112 @@
             showNotification('Вы вышли из аккаунта', 'info');
         }
 
+        // ============================================================
+        //  ПОЛУЧЕНИЕ ЭЛЕМЕНТОВ МОДАЛЬНЫХ ОКОН
+        // ============================================================
+        const editNameModal = document.getElementById('editNameModal');
+        const editEmailModal = document.getElementById('editEmailModal');
+        const subscribeModal = document.getElementById('subscribeModal');
+
+        // ============================================================
+        //  ПРОФИЛЬ - РЕДАКТИРОВАНИЕ ИМЕНИ
+        // ============================================================
+        function openEditNameModal() {
+            if (!currentUser) return;
+            document.getElementById('editNameInput').value = currentUser.username || '';
+            document.getElementById('editNameError').classList.remove('visible');
+            document.getElementById('editNameSuccess').classList.remove('visible');
+            document.getElementById('editNameModal').classList.add('active');
+        }
+
+        function closeEditNameModal() {
+            document.getElementById('editNameModal').classList.remove('active');
+        }
+
+        function saveNameChanges() {
+            const newName = document.getElementById('editNameInput').value.trim();
+            if (!newName) {
+                document.getElementById('editNameError').textContent = 'Имя не может быть пустым!';
+                document.getElementById('editNameError').classList.add('visible');
+                return;
+            }
+
+            const updated = DB.updateUser(currentUser.email, { username: newName });
+            if (updated) {
+                currentUser = updated;
+                updateUI();
+                document.getElementById('editNameSuccess').classList.add('visible');
+                document.getElementById('editNameError').classList.remove('visible');
+                addLog(`✅ Имя изменено на "${newName}"`, 'success');
+                setTimeout(() => {
+                    closeEditNameModal();
+                    openProfileModal();
+                }, 1000);
+            }
+        }
+
+        // ============================================================
+        //  ПРОФИЛЬ - РЕДАКТИРОВАНИЕ EMAIL
+        // ============================================================
+        function openEditEmailModal() {
+            if (!currentUser) return;
+            document.getElementById('editEmailInput').value = currentUser.email || '';
+            document.getElementById('editEmailPassword').value = '';
+            document.getElementById('editEmailError').classList.remove('visible');
+            document.getElementById('editEmailSuccess').classList.remove('visible');
+            document.getElementById('editEmailModal').classList.add('active');
+        }
+
+        function closeEditEmailModal() {
+            document.getElementById('editEmailModal').classList.remove('active');
+        }
+
+        function saveEmailChanges() {
+            const newEmail = document.getElementById('editEmailInput').value.trim();
+            const password = document.getElementById('editEmailPassword').value.trim();
+
+            if (!newEmail) {
+                document.getElementById('editEmailError').textContent = 'Введите новый email!';
+                document.getElementById('editEmailError').classList.add('visible');
+                return;
+            }
+
+            if (!password) {
+                document.getElementById('editEmailError').textContent = 'Введите пароль для подтверждения!';
+                document.getElementById('editEmailError').classList.add('visible');
+                return;
+            }
+
+            if (currentUser.password !== password) {
+                document.getElementById('editEmailError').textContent = 'Неверный пароль!';
+                document.getElementById('editEmailError').classList.add('visible');
+                return;
+            }
+
+            const users = DB.getUsers();
+            if (users.find(u => u.email === newEmail && u.email !== currentUser.email)) {
+                document.getElementById('editEmailError').textContent = 'Этот email уже используется!';
+                document.getElementById('editEmailError').classList.add('visible');
+                return;
+            }
+
+            const updated = DB.updateUser(currentUser.email, { email: newEmail });
+            if (updated) {
+                currentUser = updated;
+                updateUI();
+                document.getElementById('editEmailSuccess').classList.add('visible');
+                document.getElementById('editEmailError').classList.remove('visible');
+                addLog(`✅ Email изменён на "${newEmail}"`, 'success');
+                setTimeout(() => {
+                    closeEditEmailModal();
+                    openProfileModal();
+                }, 1000);
+            }
+        }
+
+        // ============================================================
+        //  ПРОФИЛЬ
+        // ============================================================
         function openProfileModal() {
             if (!currentUser) return;
             
@@ -1835,6 +2060,7 @@
             profileAvatar.textContent = displayName.charAt(0).toUpperCase();
             profileName.textContent = displayName;
             profileEmail.textContent = currentUser.email;
+            profileId.textContent = `ID: ${currentUser.vk_id || 'local_' + currentUser.email.substring(0, 8)}`;
             
             const statusMap = {
                 'free': '🆓 Бесплатный',
@@ -1845,7 +2071,7 @@
             profileStatus.className = 'info-value ' + (currentUser.subscription !== 'free' ? 'active' : 'inactive');
             
             profileExpiry.textContent = currentUser.subscription_expiry 
-                ? new Date(currentUser.subscription_expiry).toLocaleDateString() 
+                ? (currentUser.subscription_expiry === 'forever' ? '🔮 Навсегда' : new Date(currentUser.subscription_expiry).toLocaleDateString())
                 : '—';
             
             const hours = Math.floor(freeTimeRemaining / 3600);
@@ -1869,43 +2095,76 @@
         }
 
         // ============================================================
-        //  ТАРИФЫ
+        //  ПОДПИСКА
         // ============================================================
-        function subscribe(plan) {
+        const SUBSCRIPTION_PERIODS = {
+            '7': { days: 7, price: 199, label: '7 дней' },
+            '30': { days: 30, price: 490, label: '30 дней' },
+            '90': { days: 90, price: 1290, label: '90 дней' },
+            '365': { days: 365, price: 4490, label: '365 дней' },
+            'forever': { days: Infinity, price: 9990, label: 'Навсегда' }
+        };
+
+        function openSubscribeModal(plan) {
             if (!currentUser) {
                 openAuthModal('login');
                 showNotification('Сначала войдите в аккаунт!', 'error');
                 return;
             }
 
+            selectedSubscribePlan = plan;
             const plans = {
-                'standard': { name: 'Стандарт', price: 490, days: 30 },
-                'premium': { name: 'Премиум', price: 990, days: 30 }
+                'standard': { name: 'Стандарт', desc: 'Неограниченное время' },
+                'premium': { name: 'Премиум', desc: 'VIP доступ' }
             };
 
-            const planData = plans[plan];
-            if (!planData) return;
+            document.getElementById('subscribePlanName').textContent = plans[plan].name;
+            document.getElementById('subscribePlanDesc').textContent = plans[plan].desc;
+            document.getElementById('subscribeTitle').textContent = `📋 ${plans[plan].name}`;
+            document.getElementById('subscribeError').classList.remove('visible');
+            document.getElementById('subscribeModal').classList.add('active');
+        }
 
-            if (currentUser.subscription === plan) {
-                showNotification(`У вас уже активна подписка "${planData.name}"`, 'info');
+        function closeSubscribeModal() {
+            document.getElementById('subscribeModal').classList.remove('active');
+            selectedSubscribePlan = null;
+        }
+
+        function confirmSubscribe() {
+            const period = document.getElementById('subscribePeriod').value;
+            const periodData = SUBSCRIPTION_PERIODS[period];
+            
+            if (!periodData) {
+                document.getElementById('subscribeError').textContent = 'Выберите период!';
+                document.getElementById('subscribeError').classList.add('visible');
                 return;
             }
 
-            if (!confirm(`Подключить тариф "${planData.name}" за ${planData.price}₽/месяц?`)) return;
+            const planName = selectedSubscribePlan === 'standard' ? 'Стандарт' : 'Премиум';
+            const label = period === 'forever' ? '🔮 Навсегда' : periodData.label;
+            
+            if (!confirm(`Подключить тариф "${planName}" на ${label} за ${periodData.price}₽?`)) {
+                return;
+            }
 
-            const expiry = new Date();
-            expiry.setDate(expiry.getDate() + planData.days);
+            let expiry = null;
+            if (period !== 'forever') {
+                expiry = new Date();
+                expiry.setDate(expiry.getDate() + periodData.days);
+            }
 
             const updated = DB.updateUser(currentUser.email, {
-                subscription: plan,
-                subscription_expiry: expiry.toISOString()
+                subscription: selectedSubscribePlan,
+                subscription_expiry: expiry ? expiry.toISOString() : 'forever'
             });
 
             if (updated) {
                 currentUser = updated;
                 updateUI();
-                addLog(`✅ Подключен тариф "${planData.name}" до ${expiry.toLocaleDateString()}`, 'success');
-                showNotification(`Тариф "${planData.name}" активирован!`, 'success');
+                closeSubscribeModal();
+                const expiryText = period === 'forever' ? '🔮 НАВСЕГДА' : `до ${expiry.toLocaleDateString()}`;
+                addLog(`✅ Подключен тариф "${planName}" на ${label} — ${expiryText}`, 'success');
+                showNotification(`Тариф "${planName}" активирован на ${label}!`, 'success');
                 updateTariffButtons();
             }
         }
@@ -1916,7 +2175,7 @@
                 return;
             }
 
-            if (!confirm('Вы уверены, что хотите отключить подписку? Вы потеряете все привилегии.')) return;
+            if (!confirm('Вы уверены, что хотите отключить подписку?')) return;
 
             const updated = DB.updateUser(currentUser.email, {
                 subscription: 'free',
@@ -2114,7 +2373,7 @@
         }
 
         // ============================================================
-        //  ЭКРАН ПК (ОВЕРЛЕЙ)
+        //  ЭКРАН ПК
         // ============================================================
         function showPcOverlay(status, message, details = null) {
             const overlay = document.getElementById('pcOverlay');
@@ -2130,7 +2389,6 @@
 
             overlay.classList.add('active');
             
-            // Обновляем детали
             if (details) {
                 connType.textContent = details.type || connectionType;
                 address.textContent = details.address || '—';
@@ -2167,7 +2425,6 @@
                 closeBtn.textContent = '✖ Закрыть';
                 icon.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #ff6b6b;"></i>';
                 
-                // Показываем детали ошибки
                 if (details && details.error) {
                     errorDetail.style.display = 'block';
                     errorMessage.textContent = details.error;
@@ -2203,6 +2460,23 @@
                 return;
             }
 
+            if (currentUser.subscription !== 'free' && currentUser.subscription_expiry && currentUser.subscription_expiry !== 'forever') {
+                const expiry = new Date(currentUser.subscription_expiry);
+                if (expiry < new Date()) {
+                    const updated = DB.updateUser(currentUser.email, {
+                        subscription: 'free',
+                        subscription_expiry: null
+                    });
+                    if (updated) {
+                        currentUser = updated;
+                        updateUI();
+                        addLog('⏰ Подписка истекла, переключено на бесплатный тариф', 'info');
+                        showNotification('Подписка истекла!', 'error');
+                        return;
+                    }
+                }
+            }
+
             let server = '';
             let details = { type: connectionType, address: '' };
             
@@ -2220,7 +2494,6 @@
                 details.address = server;
             }
 
-            // Показываем экран ПК с загрузкой
             showPcOverlay('loading', 'Подключение к удалённому ПК...', details);
             addLog(`🔄 Запуск CS на ${connectionType === 'local' ? 'сервере' : 'ngrok'} ${server}...`, 'info');
             launchBtn.disabled = true;
@@ -2404,6 +2677,24 @@
             if (e.target === profileModal) closeProfileModal();
         });
 
+        if (editNameModal) {
+            editNameModal.addEventListener('click', (e) => {
+                if (e.target === editNameModal) closeEditNameModal();
+            });
+        }
+
+        if (editEmailModal) {
+            editEmailModal.addEventListener('click', (e) => {
+                if (e.target === editEmailModal) closeEditEmailModal();
+            });
+        }
+
+        if (subscribeModal) {
+            subscribeModal.addEventListener('click', (e) => {
+                if (e.target === subscribeModal) closeSubscribeModal();
+            });
+        }
+
         devModalOverlay.addEventListener('click', (e) => {
             if (e.target === devModalOverlay) closeDevModal();
         });
@@ -2442,7 +2733,7 @@
             currentUser = DB.getCurrentUser();
             updateUI();
 
-            if (currentUser && currentUser.subscription_expiry) {
+            if (currentUser && currentUser.subscription_expiry && currentUser.subscription_expiry !== 'forever') {
                 const expiry = new Date(currentUser.subscription_expiry);
                 if (expiry < new Date()) {
                     const updated = DB.updateUser(currentUser.email, {
@@ -2461,6 +2752,7 @@
             addLog('💡 Войдите в аккаунт для управления подпиской', 'info');
             addLog('🍪 Сессия сохраняется в cookies', 'info');
             addLog('🎮 Активируйте бесплатный доступ на 1 час', 'info');
+            addLog('✏️ В профиле можно изменить имя и email', 'info');
 
             connectionUrlDisplay.textContent = ' (http://127.0.0.1:5000)';
             getStatus();
@@ -2469,9 +2761,10 @@
             console.log('📌 Пользователи хранятся в localStorage');
             console.log('🍪 Сессия хранится в cookies (30 дней)');
             console.log('🔑 VK ID для быстрой регистрации');
+            console.log('✏️ Редактирование имени и email в профиле');
         }
 
         init();
     </script>
 </body>
-</html>
+                </html>
